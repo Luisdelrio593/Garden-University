@@ -1,0 +1,40 @@
+# Compiled class files
+*.class
+target/
+
+# Log files
+*.log
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.eclipse/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build and deploy artifacts
+build/
+deploy/
+*.jar
+*.war
+*.zip
+
+# Temporary files
+*.tmp
+*.temp
+~*
+
+# Application specific
+garden-university-*.zip
+static/
+netlify.toml
+system.properties
+Procfile
