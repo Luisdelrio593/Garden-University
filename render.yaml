@@ -2,9 +2,8 @@ services:
   - type: web
     name: garden-university-system
     runtime: java
-    rootDir: ./Garden-University
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/garden-university-system-0.0.1-SNAPSHOT.jar
+    buildCommand: cd Garden-University && ./mvnw clean package -DskipTests
+    startCommand: cd Garden-University && java -jar target/garden-university-system-0.0.1-SNAPSHOT.jar
     envVars:
       - key: PORT
         value: 8080

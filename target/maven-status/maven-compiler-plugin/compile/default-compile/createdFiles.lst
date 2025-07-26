@@ -2,6 +2,7 @@ com/garden/university/service/SubjectService.class
 com/garden/university/repository/TeacherRepository.class
 com/garden/university/model/TeacherSubjectAssignment.class
 com/garden/university/model/Administrative.class
+com/garden/university/model/StudentSubjectAssignment.class
 com/garden/university/dto/ChangePasswordResponse.class
 com/garden/university/service/UserService.class
 com/garden/university/service/StudentService.class
@@ -15,10 +16,13 @@ com/garden/university/model/AcademicProgram.class
 com/garden/university/config/DataInitializer.class
 com/garden/university/service/TeacherSubjectAssignmentService.class
 com/garden/university/repository/UserRepository.class
+com/garden/university/controller/AssignmentController.class
+com/garden/university/service/StudentSubjectAssignmentService.class
 com/garden/university/model/User.class
 com/garden/university/repository/AdministrativeRepository.class
 com/garden/university/model/Student.class
 com/garden/university/repository/StudentRepository.class
+com/garden/university/repository/StudentSubjectAssignmentRepository.class
 com/garden/university/config/PasswordConfig.class
 com/garden/university/repository/SubjectRepository.class
 com/garden/university/repository/AcademicProgramRepository.class
@@ -27,3 +31,4 @@ com/garden/university/config/SecurityConfig.class
 com/garden/university/service/TeacherService.class
 com/garden/university/service/AdministrativeService.class
 com/garden/university/repository/TeacherSubjectAssignmentRepository.class
+com/garden/university/controller/DashboardController.class
