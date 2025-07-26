@@ -2,6 +2,7 @@
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/DataInitializer.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/PasswordConfig.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/SecurityConfig.java
+/home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/WebMvcConfig.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/AssignmentController.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/DashboardController.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/LoginController.java

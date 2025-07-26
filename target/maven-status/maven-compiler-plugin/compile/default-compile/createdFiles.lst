@@ -14,6 +14,7 @@ com/garden/university/model/Teacher.class
 com/garden/university/model/Subject.class
 com/garden/university/service/CustomUserDetailsService.class
 com/garden/university/model/AcademicProgram.class
+com/garden/university/config/WebMvcConfig.class
 com/garden/university/config/DataInitializer.class
 com/garden/university/service/TeacherSubjectAssignmentService.class
 com/garden/university/repository/UserRepository.class
