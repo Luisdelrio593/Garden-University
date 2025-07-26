@@ -7,6 +7,7 @@ com/garden/university/dto/ChangePasswordResponse.class
 com/garden/university/service/UserService.class
 com/garden/university/service/StudentService.class
 com/garden/university/dto/ChangePasswordRequest.class
+com/gardenuniversity/controller/HealthController.class
 com/garden/university/controller/LoginController.class
 com/garden/university/service/AcademicProgramService.class
 com/garden/university/model/Teacher.class
