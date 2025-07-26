@@ -3,423 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden University - Asignación de Materias</title>
+    <title>Gestión de Asignaciones - Garden University</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #2c3e50, #34495e) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .page-header {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin: 30px 0;
-        }
-        .content-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            border: none;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-        }
-        .table th {
-            background: #f8f9fa;
-            border: none;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .action-buttons .btn {
-            margin: 0 2px;
-            border-radius: 8px;
-        }
-        .form-floating input, .form-floating select {
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
-        }
-        .form-floating input:focus, .form-floating select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-        }
-        .nav-tabs .nav-link {
-            border-radius: 10px 10px 0 0;
-            border: none;
-            background: #f8f9fa;
-            color: #6c757d;
-            margin-right: 5px;
+        .sidebar { 
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2E8B57, #228B22);
         }
         .nav-tabs .nav-link.active {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
+            background-color: #2E8B57 !important;
+            border-color: #2E8B57 !important;
+            color: white !important;
         }
-        .tab-content {
-            background: white;
-            border-radius: 0 15px 15px 15px;
-            padding: 30px;
+        .btn-success-custom {
+            background-color: #2E8B57;
+            border-color: #2E8B57;
         }
-        .assignment-card {
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        .assignment-card:hover {
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header {
-                margin: 15px 0;
-                border-radius: 15px;
-                padding: 20px;
-            }
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-            .content-card {
-                margin: 10px 0;
-                border-radius: 15px;
-            }
-            .btn {
-                font-size: 0.85rem;
-                padding: 8px 15px;
-            }
-            .table {
-                font-size: 0.85rem;
-            }
-            .action-buttons .btn {
-                padding: 5px 8px;
-                margin: 1px;
-            }
-            .modal-dialog {
-                margin: 0.5rem;
-            }
-            .assignment-card {
-                padding: 12px;
-                margin-bottom: 12px;
-            }
-            .nav-tabs {
-                font-size: 0.9rem;
-            }
-            .tab-content {
-                padding: 20px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            body {
-                padding: 5px;
-            }
-            .container {
-                padding: 10px;
-            }
-            .page-header {
-                margin: 10px 0;
-                padding: 15px;
-            }
-            .page-header h1 {
-                font-size: 1.3rem;
-            }
-            .content-card {
-                padding: 15px;
-            }
-            .btn {
-                font-size: 0.8rem;
-                padding: 6px 12px;
-            }
-            .table {
-                font-size: 0.8rem;
-            }
-            .action-buttons .btn {
-                padding: 4px 6px;
-                margin: 1px 0;
-            }
-            .modal-header h4 {
-                font-size: 1.1rem;
-            }
-            .form-floating input, .form-floating select {
-                font-size: 16px; /* Evita zoom en iOS */
-            }
-            .assignment-card {
-                padding: 10px;
-                margin-bottom: 10px;
-            }
-            .tab-content {
-                padding: 15px;
-            }
-            .d-flex.justify-content-between {
-                flex-direction: column;
-                gap: 10px;
-            }
+        .btn-success-custom:hover {
+            background-color: #228B22;
+            border-color: #228B22;
         }
     </style>
 </head>
 <body>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/dashboard">
-            <i class="fas fa-university"></i> Garden University
-        </a>
-        <div class="navbar-nav ms-auto">
-            <span class="navbar-text me-3">
-                <i class="fas fa-user"></i> <span th:text="${userEmail}"></span>
-            </span>
-            <a class="nav-link" href="/logout">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </a>
-        </div>
-    </div>
-</nav>
-
-<!-- Page Header -->
-<div class="container">
-    <div class="page-header p-4 text-center">
-        <h2><i class="fas fa-link"></i> Asignación de Materias</h2>
-        <p class="mb-0">Asigna materias a los docentes por grupos</p>
-    </div>
-</div>
-
-<!-- Main Content -->
-<div class="container pb-5">
-    
-    <!-- Mensajes de éxito/error -->
-    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <!-- Pestañas principales -->
-    <ul class="nav nav-tabs" id="assignmentTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">
-                <i class="fas fa-list"></i> Asignaciones Actuales
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">
-                <i class="fas fa-plus"></i> Nueva Asignación
-            </button>
-        </li>
-    </ul>
-
-    <div class="tab-content content-card" id="assignmentTabsContent">
-        
-        <!-- Lista de Asignaciones -->
-        <div class="tab-pane fade show active" id="list" role="tabpanel">
-            
-            <div class="row">
-                <div th:each="assignment : ${assignments}" class="col-md-6 col-lg-4">
-                    <div class="assignment-card">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h6 class="mb-1" th:text="${assignment.subject.nombre}"></h6>
-                            <span th:if="${assignment.activa}" class="badge bg-success">Activa</span>
-                            <span th:unless="${assignment.activa}" class="badge bg-danger">Inactiva</span>
-                        </div>
-                        
-                        <p class="text-muted mb-1">
-                            <i class="fas fa-chalkboard-teacher"></i> 
-                            <span th:text="${assignment.teacher.nombres + ' ' + assignment.teacher.apellidos}"></span>
-                        </p>
-                        
-                        <p class="text-muted mb-1">
-                            <i class="fas fa-users"></i> Grupo: <strong th:text="${assignment.grupo}"></strong>
-                        </p>
-                        
-                        <p class="text-muted mb-2">
-                            <i class="fas fa-graduation-cap"></i> 
-                            <span th:text="${assignment.subject.cuatrimestre + ' Cuatrimestre'}"></span>
-                        </p>
-                        
-                        <div class="action-buttons">
-                            <button type="button" class="btn btn-sm btn-info" 
-                                    onclick="viewAssignment(this)" 
-                                    th:data-assignment="${assignment}">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-warning" 
-                                    onclick="editAssignment(this)" 
-                                    th:data-assignment="${assignment}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form th:if="${assignment.activa}" method="post" 
-                                  th:action="@{/asignaciones/delete/{id}(id=${assignment.id})}" 
-                                  style="display: inline;"
-                                  onsubmit="return confirm('¿Estás seguro de eliminar esta asignación?')">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <div th:if="${#lists.isEmpty(assignments)}" class="col-12 text-center py-5">
-                    <i class="fas fa-link fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">No hay asignaciones registradas</h5>
-                    <p class="text-muted">Crea la primera asignación usando la pestaña "Nueva Asignación"</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nueva Asignación -->
-        <div class="tab-pane fade" id="add" role="tabpanel">
-            <form id="assignmentForm" method="post" th:action="@{/asignaciones/save}" th:object="${newAssignment}">
-                <input type="hidden" th:field="*{id}">
-                
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <h5 class="mb-4"><i class="fas fa-link"></i> Nueva Asignación de Materia</h5>
-                        
-                        <div class="form-floating mb-3">
-                            <select class="form-control" name="teacherId" required>
-                                <option value="">Seleccionar docente</option>
-                                <option th:each="teacher : ${teachers}" 
-                                        th:value="${teacher.id}" 
-                                        th:text="${teacher.nombres + ' ' + teacher.apellidos + ' (' + teacher.gradoEstudio + ')'}"></option>
-                            </select>
-                            <label>Docente *</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-control" name="subjectId" required>
-                                <option value="">Seleccionar materia</option>
-                                <option th:each="subject : ${subjects}" 
-                                        th:value="${subject.id}" 
-                                        th:text="${subject.nombre + ' (' + subject.cuatrimestre + ' Cuatrimestre)'}"></option>
-                            </select>
-                            <label>Materia *</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-control" th:field="*{grupo}" required>
-                                <option value="">Seleccionar grupo</option>
-                                <option th:each="group : ${groups}" 
-                                        th:value="${group}" 
-                                        th:text="'Grupo ' + ${group}"></option>
-                            </select>
-                            <label>Grupo *</label>
-                        </div>
-
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" th:field="*{activa}" checked>
-                            <label class="form-check-label">Asignación activa</label>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-primary me-2">
-                                <i class="fas fa-save"></i> Crear Asignación
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="resetAssignmentForm()">
-                                <i class="fas fa-times"></i> Cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Ver Asignación -->
-<div class="modal fade" id="viewAssignmentModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="fas fa-eye"></i> Detalles de la Asignación</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="assignmentDetails">
-                <!-- Se llena dinámicamente -->
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function viewAssignment(button) {
-    const assignmentData = JSON.parse(button.getAttribute('data-assignment'));
-    
-    const details = `
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6">
-                <h6><i class="fas fa-chalkboard-teacher"></i> Información del Docente</h6>
-                <p><strong>Nombre:</strong> ${assignmentData.teacher.nombres + ' ' + assignmentData.teacher.apellidos}</p>
-                <p><strong>Grado de Estudio:</strong> ${assignmentData.teacher.gradoEstudio || 'N/A'}</p>
-                <p><strong>Correo:</strong> ${assignmentData.teacher.correoInstitucional || 'N/A'}</p>
-            </div>
-            <div class="col-md-6">
-                <h6><i class="fas fa-book"></i> Información de la Materia</h6>
-                <p><strong>Materia:</strong> ${assignmentData.subject.nombre}</p>
-                <p><strong>Cuatrimestre:</strong> ${assignmentData.subject.cuatrimestre}</p>
-                <p><strong>Créditos:</strong> ${assignmentData.subject.creditos}</p>
-                <p><strong>Grupo:</strong> <span class="badge bg-info">${assignmentData.grupo}</span></p>
-                <p><strong>Estado:</strong> 
-                    <span class="badge ${assignmentData.activa ? 'bg-success' : 'bg-danger'}">
-                        ${assignmentData.activa ? 'Activa' : 'Inactiva'}
-                    </span>
-                </p>
-            </div>
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white">Garden University</h4>
+                        <small class="text-light">Sistema de Gestión</small>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/dashboard">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/asignaciones">
+                                <i class="fas fa-user-graduate"></i> Asignaciones
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/alumnos">
+                                <i class="fas fa-users"></i> Alumnos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/docentes">
+                                <i class="fas fa-chalkboard-teacher"></i> Docentes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/administrativos">
+                                <i class="fas fa-user-tie"></i> Administrativos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/programas">
+                                <i class="fas fa-graduation-cap"></i> Programas
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-auto pt-3">
+                        <a href="/logout" class="btn btn-outline-light btn-sm w-100">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Gestión de Asignaciones</h1>
+                </div>
+
+                <!-- Pestañas -->
+                <ul class="nav nav-tabs" id="assignmentTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="teacher-tab" data-bs-toggle="tab" data-bs-target="#teacher" type="button" role="tab">
+                            <i class="fas fa-chalkboard-teacher"></i> Asignaciones de Maestros
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab">
+                            <i class="fas fa-user-graduate"></i> Asignaciones de Estudiantes
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="assignmentTabContent">
+                    <!-- Pestaña de Asignaciones de Maestros -->
+                    <div class="tab-pane fade show active" id="teacher" role="tabpanel">
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Asignaciones por Maestro - Grupos y Programas</h5>
+                                        <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#newTeacherAssignmentModal">
+                                            <i class="fas fa-plus"></i> Nueva Asignación
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Maestro</th>
+                                                        <th>Programa de Estudio</th>
+                                                        <th>Modalidad</th>
+                                                        <th>Materia</th>
+                                                        <th>Grupo</th>
+                                                        <th>Estudiantes</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="assignment : ${teacherAssignments}">
+                                                        <td th:text="${assignment.teacher != null ? assignment.teacher.nombres + ' ' + assignment.teacher.apellidos : 'Sin asignar'}"></td>
+                                                        <td th:text="${assignment.subject != null && assignment.subject.academicProgram != null ? assignment.subject.academicProgram.nombre : 'Sin programa'}"></td>
+                                                        <td th:text="${assignment.subject != null && assignment.subject.academicProgram != null ? assignment.subject.academicProgram.modalidad : 'Sin modalidad'}"></td>
+                                                        <td th:text="${assignment.subject != null ? assignment.subject.nombre : 'Sin materia'}"></td>
+                                                        <td>
+                                                            <span class="badge bg-primary" th:text="${assignment.grupo ?: 'Sin grupo'}"></span>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-outline-info btn-sm" th:onclick="'viewStudents(' + ${assignment.id} + ')'">
+                                                                <i class="fas fa-eye"></i> Ver Estudiantes
+                                                            </button>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-warning btn-sm" th:onclick="'editTeacherAssignment(' + ${assignment.id} + ')'">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-danger btn-sm" th:onclick="'deleteTeacherAssignment(' + ${assignment.id} + ')'">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr th:if="${#lists.isEmpty(teacherAssignments)}">
+                                                        <td colspan="7" class="text-center text-muted">
+                                                            <i class="fas fa-info-circle"></i> No hay asignaciones de maestros registradas
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pestaña de Asignaciones de Estudiantes -->
+                    <div class="tab-pane fade" id="student" role="tabpanel">
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Asignaciones de Estudiantes por Programa</h5>
+                                        <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#newStudentAssignmentModal">
+                                            <i class="fas fa-plus"></i> Nueva Asignación de Estudiante
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Estudiante</th>
+                                                        <th>Materia</th>
+                                                        <th>Maestro</th>
+                                                        <th>Grupo</th>
+                                                        <th>Programa</th>
+                                                        <th>Cuatrimestre</th>
+                                                        <th>Modalidad</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="assignment : ${studentAssignments}">
+                                                        <td th:text="${assignment.student != null ? assignment.student.nombres + ' ' + assignment.student.apellidos : 'Sin estudiante'}"></td>
+                                                        <td th:text="${assignment.subject != null ? assignment.subject.nombre : 'Sin materia'}"></td>
+                                                        <td th:text="${assignment.teacherAssignment != null && assignment.teacherAssignment.teacher != null ? assignment.teacherAssignment.teacher.nombres + ' ' + assignment.teacherAssignment.teacher.apellidos : 'Sin maestro'}"></td>
+                                                        <td>
+                                                            <span class="badge bg-info" th:text="${assignment.grupo ?: 'Sin grupo'}"></span>
+                                                        </td>
+                                                        <td th:text="${assignment.programaEstudios ?: 'Sin programa'}"></td>
+                                                        <td>
+                                                            <span class="badge bg-secondary" th:text="${assignment.cuatrimestre ?: 'Sin cuatrimestre'}"></span>
+                                                        </td>
+                                                        <td th:text="${assignment.modalidad ?: 'Sin modalidad'}"></td>
+                                                        <td>
+                                                            <button class="btn btn-warning btn-sm" th:onclick="'editStudentAssignment(' + ${assignment.id} + ')'">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-danger btn-sm" th:onclick="'deleteStudentAssignment(' + ${assignment.id} + ')'">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr th:if="${#lists.isEmpty(studentAssignments)}">
+                                                        <td colspan="8" class="text-center text-muted">
+                                                            <i class="fas fa-info-circle"></i> No hay asignaciones de estudiantes registradas
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
-        <div class="row mt-3">
-            <div class="col-12">
-                <h6><i class="fas fa-info-circle"></i> Descripción de la Materia</h6>
-                <div class="bg-light p-3 rounded">
-                    ${assignmentData.subject.descripcion || 'Sin descripción disponible'}
+    </div>
+
+    <!-- Modal para Nueva Asignación de Maestro -->
+    <div class="modal fade" id="newTeacherAssignmentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nueva Asignación de Maestro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="teacherAssignmentForm">
+                        <div class="mb-3">
+                            <label for="teacherSelect" class="form-label">Maestro</label>
+                            <select class="form-select" id="teacherSelect" name="teacherId" required>
+                                <option value="">Selecciona un maestro...</option>
+                                <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.nombres + ' ' + teacher.apellidos}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subjectSelect" class="form-label">Materia</label>
+                            <select class="form-select" id="subjectSelect" name="subjectId" required>
+                                <option value="">Selecciona una materia...</option>
+                                <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.nombre + ' (' + subject.cuatrimestre + ')'}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="grupoInput" class="form-label">Grupo</label>
+                            <input type="text" class="form-control" id="grupoInput" name="grupo" placeholder="Ej: A, B, C..." required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success-custom" onclick="saveTeacherAssignment()">Guardar</button>
                 </div>
             </div>
         </div>
-    `;
-    
-    document.getElementById('assignmentDetails').innerHTML = details;
-    new bootstrap.Modal(document.getElementById('viewAssignmentModal')).show();
-}
+    </div>
 
-function editAssignment(button) {
-    const assignmentData = JSON.parse(button.getAttribute('data-assignment'));
-    
-    // Cambiar a la pestaña de agregar
-    document.getElementById('add-tab').click();
-    
-    // Llenar el formulario con los datos
-    document.getElementById('assignmentForm').querySelector('[name="id"]').value = assignmentData.id || '';
-    document.getElementById('assignmentForm').querySelector('[name="teacherId"]').value = assignmentData.teacher.id || '';
-    document.getElementById('assignmentForm').querySelector('[name="subjectId"]').value = assignmentData.subject.id || '';
-    document.getElementById('assignmentForm').querySelector('[name="grupo"]').value = assignmentData.grupo || '';
-    document.getElementById('assignmentForm').querySelector('[name="activa"]').checked = assignmentData.activa || false;
-}
+    <!-- Modal para Nueva Asignación de Estudiante -->
+    <div class="modal fade" id="newStudentAssignmentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nueva Asignación de Estudiante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="studentAssignmentForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="studentSelect" class="form-label">Estudiante</label>
+                                    <select class="form-select" id="studentSelect" name="studentId" required>
+                                        <option value="">Selecciona un estudiante...</option>
+                                        <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.nombres + ' ' + student.apellidos}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="teacherAssignmentSelect" class="form-label">Asignación de Maestro</label>
+                                    <select class="form-select" id="teacherAssignmentSelect" name="teacherAssignmentId" required>
+                                        <option value="">Selecciona una asignación...</option>
+                                        <option th:each="assignment : ${teacherAssignments}" 
+                                                th:value="${assignment.id}" 
+                                                th:text="${assignment.teacher.nombres + ' ' + assignment.teacher.apellidos + ' - ' + assignment.subject.nombre + ' (Grupo: ' + assignment.grupo + ')'}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="programaEstudiosInput" class="form-label">Programa de Estudios</label>
+                                    <input type="text" class="form-control" id="programaEstudiosInput" name="programaEstudios" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="cuatrimestreInput" class="form-label">Cuatrimestre</label>
+                                    <select class="form-select" id="cuatrimestreInput" name="cuatrimestre" required>
+                                        <option value="">Selecciona cuatrimestre...</option>
+                                        <option value="1">1° Cuatrimestre</option>
+                                        <option value="2">2° Cuatrimestre</option>
+                                        <option value="3">3° Cuatrimestre</option>
+                                        <option value="4">4° Cuatrimestre</option>
+                                        <option value="5">5° Cuatrimestre</option>
+                                        <option value="6">6° Cuatrimestre</option>
+                                        <option value="7">7° Cuatrimestre</option>
+                                        <option value="8">8° Cuatrimestre</option>
+                                        <option value="9">9° Cuatrimestre</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modalidadInput" class="form-label">Modalidad</label>
+                                    <select class="form-select" id="modalidadInput" name="modalidad" required>
+                                        <option value="">Selecciona modalidad...</option>
+                                        <option value="Escolarizada">Escolarizada</option>
+                                        <option value="Semiescolarizada">Semiescolarizada</option>
+                                        <option value="Abierta">Abierta</option>
+                                        <option value="Por examen ceneval">Por examen ceneval</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="grupoStudentInput" class="form-label">Grupo</label>
+                                    <input type="text" class="form-control" id="grupoStudentInput" name="grupo" placeholder="Se autocompletar con la asignación del maestro" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success-custom" onclick="saveStudentAssignment()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function resetAssignmentForm() {
-    document.getElementById('assignmentForm').reset();
-    document.getElementById('assignmentForm').querySelector('[name="id"]').value = '';
-    document.getElementById('list-tab').click();
-}
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para guardar asignación de maestro
+        function saveTeacherAssignment() {
+            const form = document.getElementById('teacherAssignmentForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                teacherId: formData.get('teacherId'),
+                subjectId: formData.get('subjectId'),
+                grupo: formData.get('grupo')
+            };
+            
+            fetch('/asignaciones/teacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Asignación guardada exitosamente');
+                    location.reload();
+                } else {
+                    alert('Error al guardar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar la asignación');
+            });
+        }
+        
+        // Función para guardar asignación de estudiante
+        function saveStudentAssignment() {
+            const form = document.getElementById('studentAssignmentForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                studentId: formData.get('studentId'),
+                teacherAssignmentId: formData.get('teacherAssignmentId'),
+                programaEstudios: formData.get('programaEstudios'),
+                cuatrimestre: formData.get('cuatrimestre'),
+                modalidad: formData.get('modalidad'),
+                grupo: formData.get('grupo')
+            };
+            
+            fetch('/asignaciones/student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Asignación de estudiante guardada exitosamente');
+                    location.reload();
+                } else {
+                    alert('Error al guardar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar la asignación');
+            });
+        }
+        
+        // Auto-completar grupo cuando se selecciona asignación de maestro
+        document.getElementById('teacherAssignmentSelect').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                const grupoMatch = selectedOption.text.match(/Grupo: (.+)\)/);
+                if (grupoMatch) {
+                    document.getElementById('grupoStudentInput').value = grupoMatch[1];
+                }
+            } else {
+                document.getElementById('grupoStudentInput').value = '';
+            }
+        });
+        
+        // Auto-completar programa de estudios desde estudiante
+        document.getElementById('studentSelect').addEventListener('change', function() {
+            const studentId = this.value;
+            if (studentId) {
+                // Buscar el programa del estudiante
+                fetch('/asignaciones/student/' + studentId + '/program')
+                .then(response => response.text())
+                .then(program => {
+                    document.getElementById('programaEstudiosInput').value = program;
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('programaEstudiosInput').value = '';
+            }
+        });
+        
+        // Funciones para editar y eliminar asignaciones
+        function editTeacherAssignment(id) {
+            // Implementar edición
+            alert('Función de edición en desarrollo para asignación ID: ' + id);
+        }
+        
+        function deleteTeacherAssignment(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta asignación?')) {
+                fetch('/asignaciones/teacher/' + id, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Asignación eliminada exitosamente');
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar la asignación');
+                });
+            }
+        }
+        
+        function editStudentAssignment(id) {
+            // Implementar edición
+            alert('Función de edición en desarrollo para asignación de estudiante ID: ' + id);
+        }
+        
+        function deleteStudentAssignment(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta asignación de estudiante?')) {
+                fetch('/asignaciones/student/' + id, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Asignación de estudiante eliminada exitosamente');
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar la asignación');
+                });
+            }
+        }
+        
+        function viewStudents(assignmentId) {
+            // Implementar vista de estudiantes
+            alert('Ver estudiantes para asignación ID: ' + assignmentId);
+        }
+    </script>
 </body>
 </html>

@@ -139,6 +139,8 @@ public class StudentService {
     
     public List<String> getProgramasEstudio() {
         return List.of(
+            // Bachillerato
+            "Bachiller",
             // Licenciaturas
             "Licenciatura en Enfermería",
             "Licenciatura en Psicología", 

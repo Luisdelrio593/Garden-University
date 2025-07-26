@@ -32,9 +32,6 @@ public class DashboardController {
     private SubjectService subjectService;
     
     @Autowired
-    private TeacherSubjectAssignmentService assignmentService;
-    
-    @Autowired
     private AcademicProgramService academicProgramService;
     
     @Autowired
@@ -403,58 +400,6 @@ public class DashboardController {
         return "redirect:/materias";
     }
     
-    // =============== ASIGNACIÓN DE MATERIAS A DOCENTES ===============
-    
-    @GetMapping("/asignaciones")
-    public String asignaciones(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        model.addAttribute("userEmail", email);
-        model.addAttribute("section", "Asignación de Materias");
-        
-        model.addAttribute("assignments", assignmentService.findActive());
-        model.addAttribute("teachers", teacherService.findActive());
-        model.addAttribute("subjects", subjectService.findActive());
-        model.addAttribute("groups", assignmentService.getAvailableGroups());
-        model.addAttribute("newAssignment", new TeacherSubjectAssignment());
-        
-        return "asignaciones";
-    }
-    
-    @PostMapping("/asignaciones/save")
-    public String saveAssignment(@ModelAttribute TeacherSubjectAssignment assignment, 
-                               @RequestParam Long teacherId, 
-                               @RequestParam Long subjectId,
-                               RedirectAttributes redirectAttributes) {
-        try {
-            Optional<Teacher> teacher = teacherService.findById(teacherId);
-            Optional<Subject> subject = subjectService.findById(subjectId);
-            
-            if (teacher.isPresent() && subject.isPresent()) {
-                assignment.setTeacher(teacher.get());
-                assignment.setSubject(subject.get());
-                assignmentService.save(assignment);
-                redirectAttributes.addFlashAttribute("success", "Asignación guardada exitosamente.");
-            } else {
-                redirectAttributes.addFlashAttribute("error", "Docente o materia no encontrados.");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al guardar: " + e.getMessage());
-        }
-        return "redirect:/asignaciones";
-    }
-    
-    @PostMapping("/asignaciones/delete/{id}")
-    public String deleteAssignment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        try {
-            assignmentService.delete(id);
-            redirectAttributes.addFlashAttribute("success", "Asignación eliminada exitosamente.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar: " + e.getMessage());
-        }
-        return "redirect:/asignaciones";
-    }
-
     @PostMapping("/change-password")
     @ResponseBody
     public ChangePasswordResponse changePassword(@RequestBody ChangePasswordRequest request) {

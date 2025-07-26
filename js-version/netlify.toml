@@ -1,8 +1,0 @@
-[build]
-  publish = "js-version"
-  command = "echo 'JavaScript version - no build needed'"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
