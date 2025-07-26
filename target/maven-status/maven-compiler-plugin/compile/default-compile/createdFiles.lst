@@ -27,4 +27,3 @@ com/garden/university/config/SecurityConfig.class
 com/garden/university/service/TeacherService.class
 com/garden/university/service/AdministrativeService.class
 com/garden/university/repository/TeacherSubjectAssignmentRepository.class
-com/garden/university/controller/DashboardController.class

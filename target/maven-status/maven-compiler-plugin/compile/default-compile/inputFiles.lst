@@ -2,6 +2,7 @@
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/DataInitializer.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/PasswordConfig.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/config/SecurityConfig.java
+/home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/AssignmentController.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/DashboardController.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/controller/LoginController.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/dto/ChangePasswordRequest.java
@@ -9,6 +10,7 @@
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/AcademicProgram.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/Administrative.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/Student.java
+/home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/StudentSubjectAssignment.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/Subject.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/Teacher.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/model/TeacherSubjectAssignment.java
@@ -16,6 +18,7 @@
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/AcademicProgramRepository.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/AdministrativeRepository.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/StudentRepository.java
+/home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/StudentSubjectAssignmentRepository.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/SubjectRepository.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/TeacherRepository.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/repository/TeacherSubjectAssignmentRepository.java
@@ -24,6 +27,7 @@
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/AdministrativeService.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/CustomUserDetailsService.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/StudentService.java
+/home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/StudentSubjectAssignmentService.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/SubjectService.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/TeacherService.java
 /home/garden-university/Garden-University/Garden-University/src/main/java/com/garden/university/service/TeacherSubjectAssignmentService.java
