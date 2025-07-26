@@ -6,9 +6,8 @@ target/
 *.log
 
 # Maven
-.mvn/
-mvnw
-mvnw.cmd
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
 
 # IDE files
 .idea/
