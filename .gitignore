@@ -5,9 +5,9 @@ target/
 # Log files
 *.log
 
-# Maven
-.mvn/wrapper/maven-wrapper.properties
-.mvn/wrapper/maven-wrapper.jar
+# Maven wrapper files (PERMITIR estos archivos)
+# .mvn/wrapper/maven-wrapper.properties
+# .mvn/wrapper/maven-wrapper.jar
 
 # IDE files
 .idea/
