@@ -22,9 +22,11 @@ Thumbs.db
 # Build and deploy artifacts
 build/
 deploy/
-*.jar
 *.war
 *.zip
+# Exclude JAR files except the main application JAR
+*.jar
+!target/garden-university-system-*.jar
 
 # Temporary files
 *.tmp
