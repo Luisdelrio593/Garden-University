@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: garden-university-system
+    runtime: java
+    rootDir: ./Garden-University
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/garden-university-system-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JAVA_OPTS
+        value: -Xmx512m -Xms256m
+    plan: free

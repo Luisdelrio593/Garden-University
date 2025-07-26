@@ -36,5 +36,3 @@ deploy/
 garden-university-*.zip
 static/
 netlify.toml
-system.properties
-Procfile
