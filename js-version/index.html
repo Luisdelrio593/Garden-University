@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden University - Sistema de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .login-left {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .login-right {
+            padding: 3rem;
+        }
+        
+        .form-control:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .btn-garden {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .btn-garden:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+            color: white;
+        }
+        
+        .university-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .login-left {
+                padding: 2rem;
+            }
+            .login-right {
+                padding: 2rem;
+            }
+            .university-icon {
+                font-size: 3rem;
+            }
+        }
+        
+        .demo-credentials {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="login-card">
+                        <div class="row g-0">
+                            <!-- Lado izquierdo -->
+                            <div class="col-lg-6 login-left">
+                                <div>
+                                    <i class="fas fa-university university-icon"></i>
+                                    <h2 class="fw-bold mb-3">Garden University</h2>
+                                    <p class="lead mb-4">Sistema Integral de Gestión Universitaria</p>
+                                    <div class="features">
+                                        <div class="mb-3">
+                                            <i class="fas fa-users me-2"></i>
+                                            <span>Gestión de Estudiantes</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <i class="fas fa-chalkboard-teacher me-2"></i>
+                                            <span>Administración de Docentes</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <i class="fas fa-graduation-cap me-2"></i>
+                                            <span>Programas Académicos</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <i class="fas fa-mobile-alt me-2"></i>
+                                            <span>100% Responsivo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Lado derecho -->
+                            <div class="col-lg-6 login-right">
+                                <div class="text-center mb-4">
+                                    <h3 class="text-success fw-bold">Iniciar Sesión</h3>
+                                    <p class="text-muted">Accede al sistema de gestión</p>
+                                </div>
+                                
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">
+                                            <i class="fas fa-envelope me-2"></i>Correo Electrónico
+                                        </label>
+                                        <input type="email" class="form-control" id="email" placeholder="usuario@garden.uni.edu" required>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="password" class="form-label">
+                                            <i class="fas fa-lock me-2"></i>Contraseña
+                                        </label>
+                                        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-garden">
+                                            <i class="fas fa-sign-in-alt me-2"></i>
+                                            Ingresar al Sistema
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Credenciales de demostración -->
+                                <div class="demo-credentials">
+                                    <h6 class="text-success fw-bold mb-2">
+                                        <i class="fas fa-key me-2"></i>Credenciales de Demostración
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-12 mb-2">
+                                            <strong>👨‍💼 Administrador:</strong><br>
+                                            <small>admin@garden.uni.edu / admin123</small>
+                                        </div>
+                                        <div class="col-12">
+                                            <strong>👨‍🎓 Director:</strong><br>
+                                            <small>director@garden.uni.edu / director123</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Manejar el login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (auth.login(email, password)) {
+                // Login exitoso
+                window.location.href = 'dashboard.html';
+            } else {
+                // Login fallido
+                showAlert('Credenciales incorrectas. Por favor verifica tu email y contraseña.', 'danger');
+            }
+        });
+        
+        // Auto-llenar credenciales para demo (opcional)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Si ya está autenticado, redirigir al dashboard
+            if (auth.isAuthenticated()) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+        
+        // Función para autocompletar credenciales (para demo)
+        function fillCredentials(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+        
+        // Agregar eventos de click a las credenciales de demo
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoCredentials = document.querySelector('.demo-credentials');
+            
+            demoCredentials.addEventListener('click', function(e) {
+                if (e.target.tagName === 'SMALL') {
+                    const credentials = e.target.textContent.split(' / ');
+                    if (credentials.length === 2) {
+                        fillCredentials(credentials[0], credentials[1]);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "garden-university-js",
+  "version": "1.0.0",
+  "description": "Sistema de Gestión Universitaria en JavaScript para Netlify",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build completed'",
+    "dev": "npx live-server ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": ["university", "management", "javascript", "netlify"],
+  "author": "Garden University",
+  "license": "MIT"
+}
