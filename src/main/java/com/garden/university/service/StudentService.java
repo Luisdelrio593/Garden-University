@@ -140,16 +140,17 @@ public class StudentService {
     public List<String> getProgramasEstudio() {
         return List.of(
             // Bachillerato
-            "Bachiller",
+            "Bachillerato",
             // Licenciaturas
             "Licenciatura en Enfermería",
             "Licenciatura en Psicología", 
-            "Licenciatura en Derecho",
             "Licenciatura en Gestión Empresarial",
+            "Licenciatura en Derecho",
             // Ingenierías
-            "Ingeniería Mecatrónica",
             "Ingeniería Industrial",
-            // Maestría
+            "Ingeniería Mecatrónica",
+            // Maestrías
+            "Maestría en Gestión y Administración de Empresas",
             "Maestría en Gestión y Administración Pública"
         );
     }

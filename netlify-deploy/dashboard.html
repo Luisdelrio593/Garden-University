@@ -202,8 +202,8 @@
                 <i class="fas fa-university me-2"></i>Garden University
             </a>
             <div class="navbar-nav ms-auto align-items-center">
-                <button class="btn btn-outline-warning btn-sm me-2" onclick="toggleSync()" id="syncToggle">
-                    <i class="fas fa-cloud-upload-alt me-1"></i>Sync: OFF
+                <button class="btn btn-outline-info btn-sm me-2" onclick="toggleSync()" id="syncToggle">
+                    <i class="fas fa-database me-1"></i>DB: Conectando...
                 </button>
                 <span class="navbar-text text-light me-3">
                     <i class="fas fa-user-circle me-1"></i>
@@ -548,6 +548,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="auth.js"></script>
+    <script src="db-config.js"></script>
     <script>
         // Verificar autenticación al cargar la página
         window.addEventListener('load', function() {
@@ -570,82 +571,63 @@
             }
         }
 
-        // ⚡ Sistema de almacenamiento rápido (localStorage + sincronización en background)
-        const SYNC_CONFIG = {
-            enabled: false, // Deshabilitado por defecto para mayor velocidad
-            url: 'https://api.jsonbin.io/v3/b/676c8f2ead19ca34f8c8a157'
-        };
-
-        // Sistema de almacenamiento híbrido optimizado
-        const fastStorage = {
-            // Guardar inmediatamente en localStorage (rápido)
-            saveLocal(data) {
-                try {
-                    localStorage.setItem('garden_students', JSON.stringify(data.students || data));
-                    localStorage.setItem('garden_student_counter', (data.counter || studentIdCounter).toString());
-                    localStorage.setItem('garden_last_save', new Date().toISOString());
-                    return true;
-                } catch (error) {
-                    console.error('Error guardando localmente:', error);
-                    return false;
-                }
-            },
-
-            // Cargar desde localStorage (instantáneo)
-            loadLocal() {
-                try {
-                    const students = localStorage.getItem('garden_students');
-                    const counter = localStorage.getItem('garden_student_counter');
-                    return {
-                        students: students ? JSON.parse(students) : [],
-                        counter: counter ? parseInt(counter) : 1
-                    };
-                } catch (error) {
-                    console.error('Error cargando localmente:', error);
-                    return { students: [], counter: 1 };
-                }
-            },
-
-            // Sincronización opcional en background (no bloquea la UI)
-            async syncInBackground(data) {
-                if (!SYNC_CONFIG.enabled) return;
-                
-                setTimeout(async () => {
-                    try {
-                        const response = await fetch(SYNC_CONFIG.url, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Master-Key': '$2a$10$9vWnO0WgF.qFRFgFcHmNteF6vY2lF5sHlKcQHyuJmPgKB8PwqLqgW'
-                            },
-                            body: JSON.stringify(data)
-                        });
-                        if (response.ok) {
-                            console.log('🔄 Datos sincronizados en background');
-                        }
-                    } catch (error) {
-                        console.log('ℹ️ Sincronización en background no disponible');
-                    }
-                }, 1000); // Retraso de 1 segundo para no afectar la UI
-            }
-        };
-
-        // Array para almacenar los estudiantes (usando almacenamiento rápido)
+        // 🗄️ Sistema de Base de Datos Mejorado
         let students = [];
         let studentIdCounter = 1;
+        let dbStatus = { connected: false, lastSync: null };
 
-        // Cargar datos al inicializar (instantáneo)
-        function initializeData() {
-            const data = fastStorage.loadLocal();
-            students = data.students || [];
-            studentIdCounter = data.counter || 1;
-            console.log(`✅ Cargados ${students.length} estudiantes instantáneamente`);
+        // 🚀 Inicializar sistema con base de datos
+        async function initializeSystem() {
+            try {
+                // Mostrar estado de carga
+                showAlert('success', '🔌 Conectando a la base de datos...', false);
+                
+                // Inicializar base de datos
+                const dbConnected = await gardenDB.initialize();
+                
+                if (dbConnected) {
+                    // Cargar datos desde la base de datos
+                    students = await gardenDB.loadStudents();
+                    studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
+                    
+                    showAlert('success', `✅ Base de datos conectada. ${students.length} estudiantes cargados`);
+                    updateDatabaseStatus(true);
+                } else {
+                    throw new Error('No se pudo conectar a la base de datos');
+                }
+            } catch (error) {
+                console.warn('⚠️ Usando modo offline:', error);
+                // Cargar datos locales como fallback
+                const localData = localStorage.getItem('garden_students');
+                students = localData ? JSON.parse(localData) : [];
+                studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
+                
+                showAlert('error', `⚠️ Modo offline activado. ${students.length} estudiantes locales`);
+                updateDatabaseStatus(false);
+            }
+            
+            // Actualizar interfaz
             updateStats();
             renderStudents();
+            initializeFilters();
         }
 
-        // Inicializar datos al cargar la página (sin esperas)
-        initializeData();
+        // 📊 Actualizar estado de la base de datos en la UI
+        function updateDatabaseStatus(connected) {
+            dbStatus = gardenDB.getConnectionStatus();
+            
+            // Actualizar indicador en la navbar
+            const syncButton = document.getElementById('syncToggle');
+            if (syncButton) {
+                if (connected) {
+                    syncButton.className = 'btn btn-outline-success btn-sm me-2';
+                    syncButton.innerHTML = '<i class="fas fa-database me-1"></i>DB: Conectada';
+                } else {
+                    syncButton.className = 'btn btn-outline-warning btn-sm me-2';
+                    syncButton.innerHTML = '<i class="fas fa-database me-1"></i>DB: Offline';
+                }
+            }
+        }
 
         // Manejar el checkbox del convenio
         document.getElementById('convenioUniversidades').addEventListener('change', function() {
@@ -665,13 +647,12 @@
             }
         });
 
-        // Manejar el envío del formulario (optimizado para velocidad)
-        document.getElementById('studentForm').addEventListener('submit', function(e) {
+        // Manejar el envío del formulario (con base de datos)
+        document.getElementById('studentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
-            const student = {
-                id: studentIdCounter++,
+            const studentData = {
                 nombres: formData.get('nombres') || 'Sin especificar',
                 apellidos: formData.get('apellidos') || 'Sin especificar',
                 fechaNacimiento: formData.get('fechaNacimiento') || '',
@@ -685,39 +666,53 @@
             };
             
             // Validar CURP único solo si se proporcionó
-            if (student.curp && students.some(s => s.curp === student.curp && s.curp !== '')) {
+            if (studentData.curp && students.some(s => s.curp === studentData.curp && s.curp !== '')) {
                 showAlert('error', 'Ya existe un alumno registrado con esta CURP');
                 return;
             }
             
-            // Agregar estudiante
-            students.push(student);
-            
-            // Guardar instantáneamente en localStorage
-            const saveData = {
-                students: students,
-                counter: studentIdCounter
-            };
-            
-            if (fastStorage.saveLocal(saveData)) {
-                showAlert('success', `✅ Alumno ${student.nombres} ${student.apellidos} registrado exitosamente`);
+            try {
+                // Mostrar estado de guardado
+                showAlert('success', '💾 Guardando alumno en la base de datos...', false);
                 
-                // Sincronizar en background (opcional, no bloquea)
-                fastStorage.syncInBackground(saveData);
-            } else {
-                showAlert('error', 'Error al guardar el alumno');
-                return;
+                // Guardar en la base de datos
+                const savedStudent = await gardenDB.saveStudent(studentData);
+                
+                // Actualizar lista local
+                students.push(savedStudent);
+                studentIdCounter = Math.max(studentIdCounter, savedStudent.id + 1);
+                
+                // Mostrar éxito
+                showAlert('success', `✅ ${savedStudent.nombres} ${savedStudent.apellidos} registrado exitosamente`);
+                
+                // Limpiar formulario
+                this.reset();
+                document.getElementById('convenioInfo').classList.add('d-none');
+                document.getElementById('montoPago').value = '';
+                document.getElementById('conceptoPago').value = '';
+                
+                // Actualizar interfaz
+                renderStudents();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error guardando estudiante:', error);
+                showAlert('error', 'Error al guardar en la base de datos. Los datos se guardaron localmente.');
+                
+                // Guardar localmente como fallback
+                const localStudent = {
+                    ...studentData,
+                    id: studentIdCounter++,
+                    created_at: new Date().toISOString()
+                };
+                
+                students.push(localStudent);
+                localStorage.setItem('garden_students', JSON.stringify(students));
+                
+                // Actualizar interfaz
+                renderStudents();
+                updateStats();
             }
-            
-            // Limpiar formulario
-            this.reset();
-            document.getElementById('convenioInfo').classList.add('d-none');
-            document.getElementById('montoPago').value = '';
-            document.getElementById('conceptoPago').value = '';
-            
-            // Actualizar interfaz instantáneamente
-            renderStudents();
-            updateStats();
         });
 
         // Formatear fecha para mostrar
@@ -1227,42 +1222,40 @@ ${Object.entries(programas).map(([prog, count]) =>
         }
         
         // Sobrescribir la función initializeData para incluir filtros
-        // Función para alternar sincronización en la nube
-        function toggleSync() {
-            SYNC_CONFIG.enabled = !SYNC_CONFIG.enabled;
+        // Función para alternar reconexión a la base de datos
+        async function toggleSync() {
             const button = document.getElementById('syncToggle');
-            const icon = button.querySelector('i');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Conectando...';
+            button.disabled = true;
             
-            if (SYNC_CONFIG.enabled) {
-                button.className = 'btn btn-outline-success btn-sm me-2';
-                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: ON';
-                showAlert('success', '☁️ Sincronización en la nube ACTIVADA');
+            try {
+                const connected = await gardenDB.initialize();
                 
-                // Sincronizar datos actuales
-                const saveData = { students: students, counter: studentIdCounter };
-                fastStorage.syncInBackground(saveData);
-            } else {
-                button.className = 'btn btn-outline-warning btn-sm me-2';
-                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: OFF';
-                showAlert('success', '💾 Modo local rápido ACTIVADO');
+                if (connected) {
+                    // Sincronizar datos actuales
+                    if (students.length > 0) {
+                        await gardenDB.syncToDatabase();
+                    }
+                    
+                    showAlert('success', '✅ Base de datos conectada y sincronizada');
+                    updateDatabaseStatus(true);
+                } else {
+                    throw new Error('No se pudo conectar');
+                }
+            } catch (error) {
+                showAlert('error', '❌ Error conectando a la base de datos. Modo offline activo.');
+                updateDatabaseStatus(false);
             }
             
-            // Guardar preferencia
-            localStorage.setItem('garden_sync_enabled', SYNC_CONFIG.enabled);
+            button.disabled = false;
         }
 
-        // Cargar preferencia de sincronización al iniciar
+        // Inicializar sistema al cargar la página
         window.addEventListener('load', function() {
-            const syncPref = localStorage.getItem('garden_sync_enabled');
-            if (syncPref === 'true') {
-                SYNC_CONFIG.enabled = true;
-                const button = document.getElementById('syncToggle');
-                button.className = 'btn btn-outline-success btn-sm me-2';
-                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: ON';
-            }
+            initializeSystem();
         });
 
-        const originalInitializeData = initializeData;
+        const originalInitializeData = initializeSystem;
         initializeData = async function() {
             await originalInitializeData();
             initializeFilters();
