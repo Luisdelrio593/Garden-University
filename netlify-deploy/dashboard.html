@@ -113,6 +113,70 @@
             backdrop-filter: blur(10px);
         }
         
+        /* Estilos para el módulo de filtros */
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table th {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 8px;
+        }
+        
+        .table td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+        
+        .badge {
+            font-size: 0.75em;
+            padding: 0.4em 0.6em;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        /* Animaciones para las estadísticas */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsive para filtros */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            
+            .btn-sm {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+            }
+            
+            .badge {
+                font-size: 0.65em;
+                padding: 0.3em 0.5em;
+            }
+        }
+        
         @media (max-width: 768px) {
             .main-container {
                 margin: 1rem;
@@ -336,6 +400,143 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Filtros y Visualización de Alumnos -->
+    <div class="container mt-4">
+        <div class="main-container">
+            <div class="card border-0 shadow-lg">
+                <div class="header-section bg-gradient text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-filter me-2"></i>
+                        Filtros y Reportes de Alumnos
+                    </h1>
+                    <p class="mb-0 opacity-75">Visualiza y filtra alumnos por diferentes criterios</p>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Controles de Filtro -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label for="filterCarrera" class="form-label">
+                                <i class="fas fa-graduation-cap me-1"></i>Programa de Estudios
+                            </label>
+                            <select class="form-select" id="filterCarrera" onchange="applyFilters()">
+                                <option value="">Todos los programas</option>
+                                <optgroup label="Bachillerato">
+                                    <option value="Bachillerato">Bachillerato</option>
+                                </optgroup>
+                                <optgroup label="Licenciaturas">
+                                    <option value="Enfermería">Enfermería</option>
+                                    <option value="Derecho">Derecho</option>
+                                    <option value="Psicología">Psicología</option>
+                                    <option value="Gestión Empresarial">Gestión Empresarial</option>
+                                    <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                                    <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                                </optgroup>
+                                <optgroup label="Maestrías">
+                                    <option value="Maestría en Gestión y Administración Pública">Maestría en Gestión y Administración Pública</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filterModalidad" class="form-label">
+                                <i class="fas fa-clock me-1"></i>Modalidad
+                            </label>
+                            <select class="form-select" id="filterModalidad" onchange="applyFilters()">
+                                <option value="">Todas las modalidades</option>
+                                <option value="Escolarizada">Escolarizada</option>
+                                <option value="Semiescolarizada">Semiescolarizada</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filterConvenio" class="form-label">
+                                <i class="fas fa-handshake me-1"></i>Convenio
+                            </label>
+                            <select class="form-select" id="filterConvenio" onchange="applyFilters()">
+                                <option value="">Todos</option>
+                                <option value="true">Con Convenio</option>
+                                <option value="false">Sin Convenio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="searchStudent" class="form-label">
+                                <i class="fas fa-search me-1"></i>Buscar Alumno
+                            </label>
+                            <input type="text" class="form-control" id="searchStudent" 
+                                   placeholder="Nombre, apellido o CURP..." onkeyup="applyFilters()">
+                        </div>
+                    </div>
+                    
+                    <!-- Botones de Acción -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary me-2" onclick="clearFilters()">
+                                <i class="fas fa-eraser me-1"></i>Limpiar Filtros
+                            </button>
+                            <button class="btn btn-outline-success me-2" onclick="exportToCSV()">
+                                <i class="fas fa-download me-1"></i>Exportar CSV
+                            </button>
+                            <button class="btn btn-outline-info" onclick="generateReport()">
+                                <i class="fas fa-chart-bar me-1"></i>Generar Reporte
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <span class="badge bg-primary fs-6" id="filteredCount">0 alumnos encontrados</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Estadísticas por Programa -->
+                    <div class="row mb-4" id="statsSection">
+                        <div class="col-12">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-chart-pie me-2"></i>Estadísticas por Programa
+                            </h5>
+                            <div class="row" id="programStats">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista Filtrada de Alumnos -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-list me-2"></i>Lista de Alumnos
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Programa</th>
+                                            <th>Modalidad</th>
+                                            <th>CURP</th>
+                                            <th>Convenio</th>
+                                            <th>Monto</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="filteredStudentsTable">
+                                        <tr>
+                                            <td colspan="9" class="text-center text-muted py-4">
+                                                <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                                                <br>No hay alumnos para mostrar
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -594,6 +795,11 @@
             `).join('');
             
             studentList.innerHTML = studentsHtml;
+            
+            // Actualizar también los filtros si existen
+            if (typeof applyFilters === 'function') {
+                applyFilters();
+            }
         }
 
         // Actualizar estadísticas
@@ -735,6 +941,299 @@
                 }, 1000);
             }
         }
+
+        // 🔍 SISTEMA DE FILTROS Y REPORTES
+        
+        // Variable para almacenar alumnos filtrados
+        let filteredStudents = [];
+        
+        // Aplicar filtros
+        function applyFilters() {
+            const filterCarrera = document.getElementById('filterCarrera').value;
+            const filterModalidad = document.getElementById('filterModalidad').value;
+            const filterConvenio = document.getElementById('filterConvenio').value;
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            
+            filteredStudents = students.filter(student => {
+                // Filtro por programa
+                if (filterCarrera && student.programa !== filterCarrera) return false;
+                
+                // Filtro por modalidad
+                if (filterModalidad && student.modalidad !== filterModalidad) return false;
+                
+                // Filtro por convenio
+                if (filterConvenio !== '') {
+                    const hasConvenio = filterConvenio === 'true';
+                    if (student.convenio !== hasConvenio) return false;
+                }
+                
+                // Filtro por búsqueda
+                if (searchTerm) {
+                    const fullName = `${student.nombres} ${student.apellidos}`.toLowerCase();
+                    const curp = (student.curp || '').toLowerCase();
+                    if (!fullName.includes(searchTerm) && !curp.includes(searchTerm)) return false;
+                }
+                
+                return true;
+            });
+            
+            updateFilteredView();
+            updateProgramStats();
+        }
+        
+        // Actualizar vista filtrada
+        function updateFilteredView() {
+            const tableBody = document.getElementById('filteredStudentsTable');
+            const countBadge = document.getElementById('filteredCount');
+            
+            countBadge.textContent = `${filteredStudents.length} alumnos encontrados`;
+            
+            if (filteredStudents.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                            <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                            <br>No hay alumnos que coincidan con los filtros
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = filteredStudents.map(student => `
+                <tr>
+                    <td><span class="badge bg-secondary">${student.id}</span></td>
+                    <td>
+                        <strong>${student.nombres} ${student.apellidos}</strong>
+                        ${student.fechaNacimiento ? `<br><small class="text-muted">Nacimiento: ${formatDate(student.fechaNacimiento)}</small>` : ''}
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">${student.programa}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-info">${student.modalidad}</span>
+                    </td>
+                    <td>
+                        <code class="small">${student.curp || 'No especificado'}</code>
+                    </td>
+                    <td>
+                        ${student.convenio ? 
+                            '<span class="badge bg-success"><i class="fas fa-check"></i> Sí</span>' : 
+                            '<span class="badge bg-secondary"><i class="fas fa-times"></i> No</span>'
+                        }
+                    </td>
+                    <td>
+                        <strong class="text-success">$${student.montoPago}</strong>
+                    </td>
+                    <td>
+                        <small>${formatDate(student.fechaRegistro)}</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetails(${student.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteStudent(${student.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Actualizar estadísticas por programa
+        function updateProgramStats() {
+            const programsContainer = document.getElementById('programStats');
+            const programCounts = {};
+            
+            // Contar alumnos por programa
+            filteredStudents.forEach(student => {
+                const programa = student.programa || 'Sin especificar';
+                if (!programCounts[programa]) {
+                    programCounts[programa] = { total: 0, convenio: 0, monto: 0 };
+                }
+                programCounts[programa].total++;
+                if (student.convenio) {
+                    programCounts[programa].convenio++;
+                    programCounts[programa].monto += parseFloat(student.montoPago || 0);
+                }
+            });
+            
+            const programCards = Object.entries(programCounts).map(([programa, stats]) => `
+                <div class="col-md-4 mb-3">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h6 class="card-title text-primary">
+                                <i class="fas fa-graduation-cap me-1"></i>${programa}
+                            </h6>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="fw-bold text-primary">${stats.total}</div>
+                                    <small class="text-muted">Total</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-success">${stats.convenio}</div>
+                                    <small class="text-muted">Convenio</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-success">$${stats.monto.toFixed(2)}</div>
+                                    <small class="text-muted">Monto</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            programsContainer.innerHTML = programCards || `
+                <div class="col-12 text-center text-muted">
+                    <i class="fas fa-chart-pie fa-2x mb-2 opacity-50"></i>
+                    <br>No hay datos para mostrar
+                </div>
+            `;
+        }
+        
+        // Limpiar filtros
+        function clearFilters() {
+            document.getElementById('filterCarrera').value = '';
+            document.getElementById('filterModalidad').value = '';
+            document.getElementById('filterConvenio').value = '';
+            document.getElementById('searchStudent').value = '';
+            applyFilters();
+        }
+        
+        // Ver detalles del estudiante
+        function viewStudentDetails(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+            
+            alert(`Detalles del Alumno:
+            
+ID: ${student.id}
+Nombre: ${student.nombres} ${student.apellidos}
+Fecha de Nacimiento: ${student.fechaNacimiento || 'No especificado'}
+CURP: ${student.curp || 'No especificado'}
+Programa: ${student.programa}
+Modalidad: ${student.modalidad}
+Convenio: ${student.convenio ? 'Sí' : 'No'}
+Monto de Pago: $${student.montoPago}
+Concepto: ${student.conceptoPago || 'N/A'}
+Fecha de Registro: ${formatDate(student.fechaRegistro)}`);
+        }
+        
+        // Eliminar estudiante
+        async function deleteStudent(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este alumno?')) return;
+            
+            const index = students.findIndex(s => s.id === id);
+            if (index === -1) return;
+            
+            const studentName = `${students[index].nombres} ${students[index].apellidos}`;
+            students.splice(index, 1);
+            
+            // Guardar cambios
+            const saveData = { students: students, counter: studentIdCounter };
+            await saveToCloudStorage(saveData);
+            
+            // Actualizar vistas
+            renderStudents();
+            updateStats();
+            applyFilters();
+            
+            showAlert('success', `Alumno ${studentName} eliminado exitosamente`);
+        }
+        
+        // Exportar a CSV
+        function exportToCSV() {
+            if (filteredStudents.length === 0) {
+                alert('No hay alumnos para exportar');
+                return;
+            }
+            
+            const headers = ['ID', 'Nombres', 'Apellidos', 'Fecha Nacimiento', 'CURP', 'Programa', 'Modalidad', 'Convenio', 'Monto Pago', 'Concepto Pago', 'Fecha Registro'];
+            
+            const csvContent = [
+                headers.join(','),
+                ...filteredStudents.map(student => [
+                    student.id,
+                    `"${student.nombres}"`,
+                    `"${student.apellidos}"`,
+                    student.fechaNacimiento || '',
+                    student.curp || '',
+                    `"${student.programa}"`,
+                    `"${student.modalidad}"`,
+                    student.convenio ? 'Sí' : 'No',
+                    student.montoPago,
+                    `"${student.conceptoPago || ''}"`,
+                    student.fechaRegistro
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `alumnos_garden_university_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+        
+        // Generar reporte
+        function generateReport() {
+            const total = filteredStudents.length;
+            const conConvenio = filteredStudents.filter(s => s.convenio).length;
+            const montoTotal = filteredStudents.reduce((sum, s) => sum + parseFloat(s.montoPago || 0), 0);
+            
+            const programas = {};
+            filteredStudents.forEach(s => {
+                const prog = s.programa || 'Sin especificar';
+                programas[prog] = (programas[prog] || 0) + 1;
+            });
+            
+            const reporteTexto = `📊 REPORTE DE ALUMNOS - GARDEN UNIVERSITY
+📅 Fecha: ${new Date().toLocaleDateString('es-MX')}
+
+📈 RESUMEN GENERAL:
+• Total de alumnos: ${total}
+• Con convenio: ${conConvenio} (${total > 0 ? ((conConvenio/total)*100).toFixed(1) : 0}%)
+• Sin convenio: ${total - conConvenio}
+• Monto total convenios: $${montoTotal.toFixed(2)} MXN
+
+📚 DISTRIBUCIÓN POR PROGRAMA:
+${Object.entries(programas).map(([prog, count]) => 
+    `• ${prog}: ${count} alumno${count !== 1 ? 's' : ''}`
+).join('\n')}
+
+🎯 GENERADO POR: ${document.getElementById('adminUserName').textContent}`;
+            
+            // Mostrar reporte en una ventana nueva
+            const ventana = window.open('', '_blank');
+            ventana.document.write(`
+                <html>
+                    <head>
+                        <title>Reporte Garden University</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            pre { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <pre>${reporteTexto}</pre>
+                        <button onclick="window.print()">Imprimir</button>
+                        <button onclick="window.close()">Cerrar</button>
+                    </body>
+                </html>
+            `);
+        }
+        
+        // Inicializar filtros cuando se cargan los datos
+        function initializeFilters() {
+            applyFilters();
+        }
+        
+        // Sobrescribir la función initializeData para incluir filtros
+        const originalInitializeData = initializeData;
+        initializeData = async function() {
+            await originalInitializeData();
+            initializeFilters();
+        };
     </script>
 </body>
 </html>
