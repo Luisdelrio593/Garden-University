@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden University - Registro de Alumnos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .convenience-badge {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .navbar-custom {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .header-section {
+                padding: 1.5rem;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-university me-2"></i>Garden University
+            </a>
+            <div class="navbar-nav ms-auto align-items-center">
+                <span class="navbar-text text-light me-3">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span id="adminUserName">Administrador</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5" style="margin-top: 100px !important;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="main-container">
+                    <!-- Header -->
+                    <div class="header-section text-center">
+                        <h1 class="mb-2">
+                            <i class="fas fa-user-graduate me-3"></i>
+                            Registro de Alumnos
+                        </h1>
+                        <p class="mb-0 opacity-75">Sistema simplificado para Garden University</p>
+                    </div>
+                    
+                    <!-- Formulario de Registro -->
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Formulario -->
+                            <div class="col-lg-6">
+                                <h4 class="mb-4 text-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Alumno
+                                </h4>
+                                
+                                <!-- Alertas -->
+                                <div id="successAlert" class="alert alert-success d-none" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <span id="successMessage"></span>
+                                </div>
+                                
+                                <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="errorMessage"></span>
+                                </div>
+                                
+                                <form id="studentForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nombres" class="form-label">
+                                                <i class="fas fa-user me-1"></i>Nombres *
+                                            </label>
+                                            <input type="text" class="form-control" id="nombres" name="nombres" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="apellidos" class="form-label">
+                                                <i class="fas fa-user me-1"></i>Apellidos *
+                                            </label>
+                                            <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="fechaNacimiento" class="form-label">
+                                                <i class="fas fa-calendar me-1"></i>Fecha de Nacimiento *
+                                            </label>
+                                            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="curp" class="form-label">
+                                                <i class="fas fa-id-card me-1"></i>CURP *
+                                            </label>
+                                            <input type="text" class="form-control" id="curp" name="curp" maxlength="18" 
+                                                   pattern="[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9]{2}" 
+                                                   placeholder="AAAA000000HAAAAN00" required style="text-transform: uppercase;">
+                                            <div class="form-text">Formato: AAAA000000HAAAAN00</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="programa" class="form-label">
+                                                <i class="fas fa-graduation-cap me-1"></i>Programa de Estudios *
+                                            </label>
+                                            <select class="form-select" id="programa" name="programa" required>
+                                                <option value="">Seleccionar programa...</option>
+                                                <optgroup label="Bachillerato">
+                                                    <option value="Bachillerato">Bachillerato</option>
+                                                </optgroup>
+                                                <optgroup label="Licenciaturas">
+                                                    <option value="Enfermería">Enfermería</option>
+                                                    <option value="Derecho">Derecho</option>
+                                                    <option value="Psicología">Psicología</option>
+                                                    <option value="Gestión Empresarial">Gestión Empresarial</option>
+                                                    <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                                                    <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                                                </optgroup>
+                                                <optgroup label="Maestrías">
+                                                    <option value="Maestría en Gestión y Administración Pública">Maestría en Gestión y Administración Pública</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="modalidad" class="form-label">
+                                                <i class="fas fa-clock me-1"></i>Modalidad *
+                                            </label>
+                                            <select class="form-select" id="modalidad" name="modalidad" required>
+                                                <option value="">Seleccionar modalidad...</option>
+                                                <option value="Escolarizada">Escolarizada</option>
+                                                <option value="Semiescolarizada">Semiescolarizada</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Convenio con Universidades del Bienestar -->
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="convenioUniversidades" name="convenioUniversidades">
+                                            <label class="form-check-label" for="convenioUniversidades">
+                                                <i class="fas fa-handshake me-1"></i>
+                                                <strong>Convenio con "Universidades del Bienestar"</strong>
+                                                <br>
+                                                <small class="text-muted">Al activar esta opción, se asignará automáticamente un pago de $1,000.00</small>
+                                            </label>
+                                        </div>
+                                        <div id="convenioInfo" class="d-none">
+                                            <span class="convenience-badge">
+                                                <i class="fas fa-check me-1"></i>Pago asignado: $1,000.00 MXN
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Información de Pago -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="montoPago" class="form-label">
+                                                <i class="fas fa-dollar-sign me-1"></i>Monto de Pago
+                                            </label>
+                                            <input type="number" class="form-control" id="montoPago" name="montoPago" 
+                                                   min="0" step="0.01" placeholder="0.00" readonly>
+                                            <div class="form-text">Se completará automáticamente con el convenio</div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="conceptoPago" class="form-label">
+                                                <i class="fas fa-file-invoice me-1"></i>Concepto de Pago
+                                            </label>
+                                            <input type="text" class="form-control" id="conceptoPago" name="conceptoPago" 
+                                                   placeholder="Se asignará automáticamente" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-save me-2"></i>Registrar Alumno
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                                            <i class="fas fa-eraser me-2"></i>Limpiar Formulario
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Lista de Alumnos Registrados -->
+                            <div class="col-lg-6">
+                                <h4 class="mb-4 text-primary">
+                                    <i class="fas fa-users me-2"></i>Alumnos Registrados
+                                    <span class="badge bg-primary ms-2" id="totalCount">0</span>
+                                </h4>
+                                
+                                <div class="student-list" id="studentList">
+                                    <div class="text-center text-muted py-5">
+                                        <i class="fas fa-user-plus fa-3x mb-3 opacity-50"></i>
+                                        <h6>No hay alumnos registrados</h6>
+                                        <p class="small">Los alumnos registrados aparecerán aquí</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Resumen de Convenios -->
+                                <div class="mt-4">
+                                    <div class="card border-success">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title text-success">
+                                                <i class="fas fa-handshake me-2"></i>Convenios Activos
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="fw-bold text-success fs-4" id="convenioCount">0</div>
+                                                    <small class="text-muted">Con Convenio</small>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="fw-bold text-primary fs-4" id="totalAmount">$0.00</div>
+                                                    <small class="text-muted">Total Convenios</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Verificar autenticación al cargar la página
+        window.addEventListener('load', function() {
+            // Usar el sistema de autenticación
+            if (!gardenAuth.protectPage()) {
+                return;
+            }
+            
+            // Mostrar información del usuario
+            const userInfo = gardenAuth.getUserInfo();
+            if (userInfo && userInfo.username) {
+                document.getElementById('adminUserName').textContent = `Admin: ${userInfo.username}`;
+            }
+        });
+
+        // Función de logout
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                gardenAuth.logout();
+            }
+        }
+
+        // Array para almacenar los estudiantes (usando localStorage para persistencia)
+        let students = JSON.parse(localStorage.getItem('garden_students')) || [];
+        let studentIdCounter = parseInt(localStorage.getItem('garden_student_counter')) || 1;
+
+        // Actualizar el contador al cargar la página
+        updateStats();
+        renderStudents();
+
+        // Manejar el checkbox del convenio
+        document.getElementById('convenioUniversidades').addEventListener('change', function() {
+            const isChecked = this.checked;
+            const convenioInfo = document.getElementById('convenioInfo');
+            const montoPago = document.getElementById('montoPago');
+            const conceptoPago = document.getElementById('conceptoPago');
+            
+            if (isChecked) {
+                convenioInfo.classList.remove('d-none');
+                montoPago.value = '1000.00';
+                conceptoPago.value = 'Convenio Universidades del Bienestar';
+            } else {
+                convenioInfo.classList.add('d-none');
+                montoPago.value = '';
+                conceptoPago.value = '';
+            }
+        });
+
+        // Manejar el envío del formulario
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const student = {
+                id: studentIdCounter++,
+                nombres: formData.get('nombres'),
+                apellidos: formData.get('apellidos'),
+                fechaNacimiento: formData.get('fechaNacimiento'),
+                curp: formData.get('curp').toUpperCase(),
+                programa: formData.get('programa'),
+                modalidad: formData.get('modalidad'),
+                convenio: formData.has('convenioUniversidades'),
+                montoPago: formData.get('montoPago') || '0.00',
+                conceptoPago: formData.get('conceptoPago') || '',
+                fechaRegistro: new Date().toISOString().split('T')[0]
+            };
+            
+            // Validar CURP único
+            if (students.some(s => s.curp === student.curp)) {
+                showAlert('error', 'Ya existe un alumno registrado con esta CURP');
+                return;
+            }
+            
+            // Agregar estudiante
+            students.push(student);
+            
+            // Guardar en localStorage
+            localStorage.setItem('garden_students', JSON.stringify(students));
+            localStorage.setItem('garden_student_counter', studentIdCounter.toString());
+            
+            // Limpiar formulario
+            this.reset();
+            document.getElementById('convenioInfo').classList.add('d-none');
+            document.getElementById('montoPago').value = '';
+            document.getElementById('conceptoPago').value = '';
+            
+            // Actualizar interfaz
+            renderStudents();
+            updateStats();
+            
+            showAlert('success', `Alumno ${student.nombres} ${student.apellidos} registrado exitosamente`);
+        });
+
+        // Formatear fecha para mostrar
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Calcular edad
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+
+        // Renderizar lista de estudiantes
+        function renderStudents() {
+            const studentList = document.getElementById('studentList');
+            
+            if (students.length === 0) {
+                studentList.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-user-plus fa-3x mb-3 opacity-50"></i>
+                        <h6>No hay alumnos registrados</h6>
+                        <p class="small">Los alumnos registrados aparecerán aquí</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const studentsHtml = students.map((student, index) => `
+                <div class="student-card">
+                    <div class="card-body py-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title mb-1">
+                                    <i class="fas fa-user-circle me-1 text-primary"></i>
+                                    ${student.nombres} ${student.apellidos}
+                                </h6>
+                                <div class="small text-muted mb-2">
+                                    <div><i class="fas fa-calendar me-1"></i>Edad: ${calculateAge(student.fechaNacimiento)} años</div>
+                                    <div><i class="fas fa-id-card me-1"></i>CURP: ${student.curp}</div>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="badge bg-info">${student.programa}</span>
+                                    <span class="badge bg-secondary ms-1">${student.modalidad}</span>
+                                    ${student.convenio ? '<span class="badge bg-success ms-1"><i class="fas fa-handshake me-1"></i>Convenio</span>' : ''}
+                                </div>
+                                ${student.convenio ? `
+                                    <div class="small text-success">
+                                        <i class="fas fa-dollar-sign me-1"></i>
+                                        Pago: $${parseFloat(student.montoPago).toFixed(2)} - ${student.conceptoPago}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeStudent(${index})" title="Eliminar alumno">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            studentList.innerHTML = studentsHtml;
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const totalCount = students.length;
+            const convenioCount = students.filter(s => s.convenio).length;
+            const totalAmount = students
+                .filter(s => s.convenio)
+                .reduce((sum, s) => sum + parseFloat(s.montoPago || 0), 0);
+            
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('convenioCount').textContent = convenioCount;
+            document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+        }
+
+        // Eliminar estudiante
+        function removeStudent(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este alumno?')) {
+                const student = students[index];
+                students.splice(index, 1);
+                localStorage.setItem('garden_students', JSON.stringify(students));
+                
+                renderStudents();
+                updateStats();
+                
+                showAlert('success', `Alumno ${student.nombres} ${student.apellidos} eliminado`);
+            }
+        }
+
+        // Limpiar formulario
+        function clearForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('convenioInfo').classList.add('d-none');
+            document.getElementById('montoPago').value = '';
+            document.getElementById('conceptoPago').value = '';
+            hideAlerts();
+        }
+
+        // Mostrar alertas
+        function showAlert(type, message) {
+            hideAlerts();
+            
+            const alertElement = document.getElementById(type + 'Alert');
+            const messageElement = document.getElementById(type + 'Message');
+            
+            messageElement.textContent = message;
+            alertElement.classList.remove('d-none');
+            
+            // Ocultar automáticamente después de 5 segundos
+            setTimeout(() => {
+                alertElement.classList.add('d-none');
+            }, 5000);
+        }
+
+        // Ocultar alertas
+        function hideAlerts() {
+            document.getElementById('successAlert').classList.add('d-none');
+            document.getElementById('errorAlert').classList.add('d-none');
+        }
+
+        // Validar CURP en tiempo real
+        document.getElementById('curp').addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+        
+        // Validar solo letras en nombres y apellidos
+        document.getElementById('nombres').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+        
+        document.getElementById('apellidos').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+
+        // Exportar datos (función adicional)
+        function exportData() {
+            const dataStr = JSON.stringify(students, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'garden_university_students.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Importar datos (función adicional)
+        function importData(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedStudents = JSON.parse(e.target.result);
+                        students = importedStudents;
+                        localStorage.setItem('garden_students', JSON.stringify(students));
+                        renderStudents();
+                        updateStats();
+                        showAlert('success', 'Datos importados exitosamente');
+                    } catch (error) {
+                        showAlert('error', 'Error al importar datos: archivo inválido');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+    </script>
+</body>
+</html>
