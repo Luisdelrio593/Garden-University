@@ -202,8 +202,8 @@
                 <i class="fas fa-university me-2"></i>Garden University
             </a>
             <div class="navbar-nav ms-auto align-items-center">
-                <button class="btn btn-outline-info btn-sm me-2" onclick="syncData()" id="syncButton">
-                    <i class="fas fa-sync-alt me-1"></i>Sincronizar
+                <button class="btn btn-outline-warning btn-sm me-2" onclick="toggleSync()" id="syncToggle">
+                    <i class="fas fa-cloud-upload-alt me-1"></i>Sync: OFF
                 </button>
                 <span class="navbar-text text-light me-3">
                     <i class="fas fa-user-circle me-1"></i>
@@ -570,84 +570,81 @@
             }
         }
 
-        // 🌐 Sistema de almacenamiento sincronizado (JSONBin.io)
-        const STORAGE_CONFIG = {
-            apiKey: '$2a$10$9vWnO0WgF.qFRFgFcHmNteF6vY2lF5sHlKcQHyuJmPgKB8PwqLqgW', // API Key pública para demo
-            binId: '676c8f2ead19ca34f8c8a157' // ID del bin específico para Garden University
+        // ⚡ Sistema de almacenamiento rápido (localStorage + sincronización en background)
+        const SYNC_CONFIG = {
+            enabled: false, // Deshabilitado por defecto para mayor velocidad
+            url: 'https://api.jsonbin.io/v3/b/676c8f2ead19ca34f8c8a157'
         };
 
-        // Función para guardar en storage sincronizado
-        async function saveToCloudStorage(data) {
-            try {
-                console.log('💾 Guardando datos en la nube...');
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${STORAGE_CONFIG.binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': STORAGE_CONFIG.apiKey
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (response.ok) {
-                    console.log('✅ Datos guardados en la nube exitosamente');
+        // Sistema de almacenamiento híbrido optimizado
+        const fastStorage = {
+            // Guardar inmediatamente en localStorage (rápido)
+            saveLocal(data) {
+                try {
+                    localStorage.setItem('garden_students', JSON.stringify(data.students || data));
+                    localStorage.setItem('garden_student_counter', (data.counter || studentIdCounter).toString());
+                    localStorage.setItem('garden_last_save', new Date().toISOString());
                     return true;
-                } else {
-                    throw new Error('Error al guardar en la nube');
+                } catch (error) {
+                    console.error('Error guardando localmente:', error);
+                    return false;
                 }
-            } catch (error) {
-                console.warn('⚠️ Error en nube, guardando localmente:', error);
-                // Fallback a localStorage
-                localStorage.setItem('garden_students', JSON.stringify(data.students || data));
-                localStorage.setItem('garden_student_counter', (data.counter || studentIdCounter).toString());
-                return false;
-            }
-        }
+            },
 
-        // Función para cargar desde storage sincronizado
-        async function loadFromCloudStorage() {
-            try {
-                console.log('📥 Cargando datos desde la nube...');
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${STORAGE_CONFIG.binId}/latest`, {
-                    method: 'GET',
-                    headers: {
-                        'X-Master-Key': STORAGE_CONFIG.apiKey
-                    }
-                });
+            // Cargar desde localStorage (instantáneo)
+            loadLocal() {
+                try {
+                    const students = localStorage.getItem('garden_students');
+                    const counter = localStorage.getItem('garden_student_counter');
+                    return {
+                        students: students ? JSON.parse(students) : [],
+                        counter: counter ? parseInt(counter) : 1
+                    };
+                } catch (error) {
+                    console.error('Error cargando localmente:', error);
+                    return { students: [], counter: 1 };
+                }
+            },
+
+            // Sincronización opcional en background (no bloquea la UI)
+            async syncInBackground(data) {
+                if (!SYNC_CONFIG.enabled) return;
                 
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Datos cargados desde la nube exitosamente');
-                    return result.record || { students: [], counter: 1 };
-                } else {
-                    throw new Error('Error al cargar desde la nube');
-                }
-            } catch (error) {
-                console.warn('⚠️ Error en nube, cargando localmente:', error);
-                // Fallback a localStorage
-                const localStudents = localStorage.getItem('garden_students');
-                const localCounter = localStorage.getItem('garden_student_counter');
-                return {
-                    students: localStudents ? JSON.parse(localStudents) : [],
-                    counter: localCounter ? parseInt(localCounter) : 1
-                };
+                setTimeout(async () => {
+                    try {
+                        const response = await fetch(SYNC_CONFIG.url, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': '$2a$10$9vWnO0WgF.qFRFgFcHmNteF6vY2lF5sHlKcQHyuJmPgKB8PwqLqgW'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        if (response.ok) {
+                            console.log('🔄 Datos sincronizados en background');
+                        }
+                    } catch (error) {
+                        console.log('ℹ️ Sincronización en background no disponible');
+                    }
+                }, 1000); // Retraso de 1 segundo para no afectar la UI
             }
-        }
+        };
 
-        // Array para almacenar los estudiantes (usando almacenamiento sincronizado)
+        // Array para almacenar los estudiantes (usando almacenamiento rápido)
         let students = [];
         let studentIdCounter = 1;
 
-        // Cargar datos al inicializar
-        async function initializeData() {
-            const data = await loadFromCloudStorage();
+        // Cargar datos al inicializar (instantáneo)
+        function initializeData() {
+            const data = fastStorage.loadLocal();
             students = data.students || [];
             studentIdCounter = data.counter || 1;
+            console.log(`✅ Cargados ${students.length} estudiantes instantáneamente`);
             updateStats();
             renderStudents();
         }
 
-        // Inicializar datos al cargar la página
+        // Inicializar datos al cargar la página (sin esperas)
         initializeData();
 
         // Manejar el checkbox del convenio
@@ -668,8 +665,8 @@
             }
         });
 
-        // Manejar el envío del formulario
-        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+        // Manejar el envío del formulario (optimizado para velocidad)
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
@@ -696,19 +693,20 @@
             // Agregar estudiante
             students.push(student);
             
-            // Guardar en almacenamiento sincronizado
+            // Guardar instantáneamente en localStorage
             const saveData = {
                 students: students,
                 counter: studentIdCounter
             };
             
-            showAlert('success', '💾 Guardando alumno...', false);
-            
-            try {
-                await saveToCloudStorage(saveData);
-                showAlert('success', `✅ Alumno ${student.nombres} ${student.apellidos} registrado exitosamente y sincronizado`);
-            } catch (error) {
-                showAlert('success', `✅ Alumno ${student.nombres} ${student.apellidos} registrado localmente`);
+            if (fastStorage.saveLocal(saveData)) {
+                showAlert('success', `✅ Alumno ${student.nombres} ${student.apellidos} registrado exitosamente`);
+                
+                // Sincronizar en background (opcional, no bloquea)
+                fastStorage.syncInBackground(saveData);
+            } else {
+                showAlert('error', 'Error al guardar el alumno');
+                return;
             }
             
             // Limpiar formulario
@@ -717,7 +715,7 @@
             document.getElementById('montoPago').value = '';
             document.getElementById('conceptoPago').value = '';
             
-            // Actualizar interfaz
+            // Actualizar interfaz instantáneamente
             renderStudents();
             updateStats();
         });
@@ -1229,6 +1227,41 @@ ${Object.entries(programas).map(([prog, count]) =>
         }
         
         // Sobrescribir la función initializeData para incluir filtros
+        // Función para alternar sincronización en la nube
+        function toggleSync() {
+            SYNC_CONFIG.enabled = !SYNC_CONFIG.enabled;
+            const button = document.getElementById('syncToggle');
+            const icon = button.querySelector('i');
+            
+            if (SYNC_CONFIG.enabled) {
+                button.className = 'btn btn-outline-success btn-sm me-2';
+                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: ON';
+                showAlert('success', '☁️ Sincronización en la nube ACTIVADA');
+                
+                // Sincronizar datos actuales
+                const saveData = { students: students, counter: studentIdCounter };
+                fastStorage.syncInBackground(saveData);
+            } else {
+                button.className = 'btn btn-outline-warning btn-sm me-2';
+                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: OFF';
+                showAlert('success', '💾 Modo local rápido ACTIVADO');
+            }
+            
+            // Guardar preferencia
+            localStorage.setItem('garden_sync_enabled', SYNC_CONFIG.enabled);
+        }
+
+        // Cargar preferencia de sincronización al iniciar
+        window.addEventListener('load', function() {
+            const syncPref = localStorage.getItem('garden_sync_enabled');
+            if (syncPref === 'true') {
+                SYNC_CONFIG.enabled = true;
+                const button = document.getElementById('syncToggle');
+                button.className = 'btn btn-outline-success btn-sm me-2';
+                button.innerHTML = '<i class="fas fa-cloud-upload-alt me-1"></i>Sync: ON';
+            }
+        });
+
         const originalInitializeData = initializeData;
         initializeData = async function() {
             await originalInitializeData();
