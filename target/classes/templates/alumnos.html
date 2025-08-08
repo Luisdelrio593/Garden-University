@@ -319,9 +319,6 @@
                             </td>
                             <td>
                                 <span th:text="${student.correoInstitucional}"></span>
-                                <br>
-                                <small class="text-muted student-info" 
-                                       th:text="${student.correoAlumno ?: 'No registrado'}"></small>
                             </td>
                             <td>
                                 <span th:if="${student.conceptoPago != null}" class="badge bg-success">
@@ -501,11 +498,6 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <label for="correoAlumno" class="form-label">Correo Personal</label>
-                                        <input type="email" class="form-control" id="correoAlumno" name="correoAlumno" 
-                                               placeholder="ejemplo@gmail.com">
-                                    </div>
                                     <div class="col-md-6">
                                         <label for="correoInstitucional" class="form-label">Correo Institucional *</label>
                                         <input type="email" class="form-control" id="correoInstitucional" name="correoInstitucional" 
@@ -746,7 +738,6 @@
                                     <tr><td><strong>Domicilio:</strong></td><td>${student.domicilio || 'No registrado'}</td></tr>
                                     <tr><td><strong>Celular:</strong></td><td>${student.celular || 'No registrado'}</td></tr>
                                     <tr><td><strong>Celular emergencia:</strong></td><td>${student.celularEmergencia || 'No registrado'}</td></tr>
-                                    <tr><td><strong>Correo personal:</strong></td><td>${student.correoAlumno || 'No registrado'}</td></tr>
                                     <tr><td><strong>Correo institucional:</strong></td><td>${student.correoInstitucional}</td></tr>
                                     <tr><td><strong>Contraseña de acceso:</strong></td><td>
                                         ${student.passwordAcceso ? '<span class="text-success"><i class="fas fa-check-circle me-1"></i>Configurada</span>' : '<span class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i>No configurada</span>'}
@@ -800,7 +791,6 @@
                     document.getElementById('domicilio').value = student.domicilio;
                     document.getElementById('celular').value = student.celular;
                     document.getElementById('celularEmergencia').value = student.celularEmergencia;
-                    document.getElementById('correoAlumno').value = student.correoAlumno;
                     document.getElementById('correoInstitucional').value = student.correoInstitucional;
                     document.getElementById('passwordAcceso').value = student.passwordAcceso || '';
                     document.getElementById('programaEstudios').value = student.programaEstudios || '';

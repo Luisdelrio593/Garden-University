@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden University - Registro de Alumnos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 2rem;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .convenience-badge {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .navbar-custom {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Estilos para el módulo de filtros */
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table th {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 8px;
+        }
+        
+        .table td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+        
+        .badge {
+            font-size: 0.75em;
+            padding: 0.4em 0.6em;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        /* Animaciones para las estadísticas */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsive para filtros */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+            
+            .btn-sm {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+            }
+            
+            .badge {
+                font-size: 0.65em;
+                padding: 0.3em 0.5em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .header-section {
+                padding: 1.5rem;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-university me-2"></i>Garden University
+            </a>
+            <div class="navbar-nav ms-auto align-items-center">
+                <button class="btn btn-outline-info btn-sm me-2" onclick="toggleSync()" id="syncToggle">
+                    <i class="fas fa-database me-1"></i>DB: Conectando...
+                </button>
+                <span class="navbar-text text-light me-3">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span id="adminUserName">Administrador</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5" style="margin-top: 100px !important;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="main-container">
+                    <!-- Header -->
+                    <div class="header-section text-center">
+                        <h1 class="mb-2">
+                            <i class="fas fa-user-graduate me-3"></i>
+                            Registro de Alumnos
+                        </h1>
+                        <p class="mb-0 opacity-75">Sistema simplificado para Garden University</p>
+                    </div>
+                    
+                    <!-- Formulario de Registro -->
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Formulario -->
+                            <div class="col-lg-6">
+                                <h4 class="mb-4 text-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Alumno
+                                </h4>
+                                
+                                <!-- Alertas -->
+                                <div id="successAlert" class="alert alert-success d-none" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <span id="successMessage"></span>
+                                </div>
+                                
+                                <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span id="errorMessage"></span>
+                                </div>
+                                
+                                <form id="studentForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="nombres" class="form-label">
+                                                <i class="fas fa-user me-1"></i>Nombres
+                                            </label>
+                                            <input type="text" class="form-control" id="nombres" name="nombres">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="apellidos" class="form-label">
+                                                <i class="fas fa-user me-1"></i>Apellidos
+                                            </label>
+                                            <input type="text" class="form-control" id="apellidos" name="apellidos">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="fechaNacimiento" class="form-label">
+                                                <i class="fas fa-calendar me-1"></i>Fecha de Nacimiento
+                                            </label>
+                                            <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="curp" class="form-label">
+                                                <i class="fas fa-id-card me-1"></i>CURP
+                                            </label>
+                                            <input type="text" class="form-control" id="curp" name="curp" maxlength="18" 
+                                                   placeholder="AAAA000000HAAAAN00 (opcional)" style="text-transform: uppercase;">
+                                            <div class="form-text">Formato: AAAA000000HAAAAN00 (opcional)</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="programa" class="form-label">
+                                                <i class="fas fa-graduation-cap me-1"></i>Programa de Estudios
+                                            </label>
+                                            <select class="form-select" id="programa" name="programa">
+                                                <option value="">Seleccionar programa...</option>
+                                                <optgroup label="Bachillerato">
+                                                    <option value="Bachillerato">Bachillerato</option>
+                                                </optgroup>
+                                                <optgroup label="Licenciaturas">
+                                                    <option value="Enfermería">Enfermería</option>
+                                                    <option value="Derecho">Derecho</option>
+                                                    <option value="Psicología">Psicología</option>
+                                                    <option value="Gestión Empresarial">Gestión Empresarial</option>
+                                                    <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                                                    <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                                                </optgroup>
+                                                <optgroup label="Maestrías">
+                                                    <option value="Maestría en Gestión y Administración Pública">Maestría en Gestión y Administración Pública</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="modalidad" class="form-label">
+                                                <i class="fas fa-clock me-1"></i>Modalidad
+                                            </label>
+                                            <select class="form-select" id="modalidad" name="modalidad">
+                                                <option value="">Seleccionar modalidad...</option>
+                                                <option value="Escolarizada">Escolarizada</option>
+                                                <option value="Semiescolarizada">Semiescolarizada</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Convenio con Universidades del Bienestar -->
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="convenioUniversidades" name="convenioUniversidades">
+                                            <label class="form-check-label" for="convenioUniversidades">
+                                                <i class="fas fa-handshake me-1"></i>
+                                                <strong>Convenio con "Universidades del Bienestar"</strong>
+                                                <br>
+                                                <small class="text-muted">Al activar esta opción, se asignará automáticamente un pago de $1,000.00</small>
+                                            </label>
+                                        </div>
+                                        <div id="convenioInfo" class="d-none">
+                                            <span class="convenience-badge">
+                                                <i class="fas fa-check me-1"></i>Pago asignado: $1,000.00 MXN
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Información de Pago -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="montoPago" class="form-label">
+                                                <i class="fas fa-dollar-sign me-1"></i>Monto de Pago
+                                            </label>
+                                            <input type="number" class="form-control" id="montoPago" name="montoPago" 
+                                                   min="0" step="0.01" placeholder="0.00" readonly>
+                                            <div class="form-text">Se completará automáticamente con el convenio</div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="conceptoPago" class="form-label">
+                                                <i class="fas fa-file-invoice me-1"></i>Concepto de Pago
+                                            </label>
+                                            <input type="text" class="form-control" id="conceptoPago" name="conceptoPago" 
+                                                   placeholder="Se asignará automáticamente" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-save me-2"></i>Registrar Alumno
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                                            <i class="fas fa-eraser me-2"></i>Limpiar Formulario
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Lista de Alumnos Registrados -->
+                            <div class="col-lg-6">
+                                <h4 class="mb-4 text-primary">
+                                    <i class="fas fa-users me-2"></i>Alumnos Registrados
+                                    <span class="badge bg-primary ms-2" id="totalCount">0</span>
+                                </h4>
+                                
+                                <div class="student-list" id="studentList">
+                                    <div class="text-center text-muted py-5">
+                                        <i class="fas fa-user-plus fa-3x mb-3 opacity-50"></i>
+                                        <h6>No hay alumnos registrados</h6>
+                                        <p class="small">Los alumnos registrados aparecerán aquí</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Resumen de Convenios -->
+                                <div class="mt-4">
+                                    <div class="card border-success">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title text-success">
+                                                <i class="fas fa-handshake me-2"></i>Convenios Activos
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="fw-bold text-success fs-4" id="convenioCount">0</div>
+                                                    <small class="text-muted">Con Convenio</small>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="fw-bold text-primary fs-4" id="totalAmount">$0.00</div>
+                                                    <small class="text-muted">Total Convenios</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Filtros y Visualización de Alumnos -->
+    <div class="container mt-4">
+        <div class="main-container">
+            <div class="card border-0 shadow-lg">
+                <div class="header-section bg-gradient text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-filter me-2"></i>
+                        Filtros y Reportes de Alumnos
+                    </h1>
+                    <p class="mb-0 opacity-75">Visualiza y filtra alumnos por diferentes criterios</p>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Controles de Filtro -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label for="filterCarrera" class="form-label">
+                                <i class="fas fa-graduation-cap me-1"></i>Programa de Estudios
+                            </label>
+                            <select class="form-select" id="filterCarrera" onchange="applyFilters()">
+                                <option value="">Todos los programas</option>
+                                <optgroup label="Bachillerato">
+                                    <option value="Bachillerato">Bachillerato</option>
+                                </optgroup>
+                                <optgroup label="Licenciaturas">
+                                    <option value="Enfermería">Enfermería</option>
+                                    <option value="Derecho">Derecho</option>
+                                    <option value="Psicología">Psicología</option>
+                                    <option value="Gestión Empresarial">Gestión Empresarial</option>
+                                    <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                                    <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                                </optgroup>
+                                <optgroup label="Maestrías">
+                                    <option value="Maestría en Gestión y Administración Pública">Maestría en Gestión y Administración Pública</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filterModalidad" class="form-label">
+                                <i class="fas fa-clock me-1"></i>Modalidad
+                            </label>
+                            <select class="form-select" id="filterModalidad" onchange="applyFilters()">
+                                <option value="">Todas las modalidades</option>
+                                <option value="Escolarizada">Escolarizada</option>
+                                <option value="Semiescolarizada">Semiescolarizada</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="filterConvenio" class="form-label">
+                                <i class="fas fa-handshake me-1"></i>Convenio
+                            </label>
+                            <select class="form-select" id="filterConvenio" onchange="applyFilters()">
+                                <option value="">Todos</option>
+                                <option value="true">Con Convenio</option>
+                                <option value="false">Sin Convenio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="searchStudent" class="form-label">
+                                <i class="fas fa-search me-1"></i>Buscar Alumno
+                            </label>
+                            <input type="text" class="form-control" id="searchStudent" 
+                                   placeholder="Nombre, apellido o CURP..." onkeyup="applyFilters()">
+                        </div>
+                    </div>
+                    
+                    <!-- Botones de Acción -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary me-2" onclick="clearFilters()">
+                                <i class="fas fa-eraser me-1"></i>Limpiar Filtros
+                            </button>
+                            <button class="btn btn-outline-success me-2" onclick="exportToCSV()">
+                                <i class="fas fa-download me-1"></i>Exportar CSV
+                            </button>
+                            <button class="btn btn-outline-info" onclick="generateReport()">
+                                <i class="fas fa-chart-bar me-1"></i>Generar Reporte
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <span class="badge bg-primary fs-6" id="filteredCount">0 alumnos encontrados</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Estadísticas por Programa -->
+                    <div class="row mb-4" id="statsSection">
+                        <div class="col-12">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-chart-pie me-2"></i>Estadísticas por Programa
+                            </h5>
+                            <div class="row" id="programStats">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista Filtrada de Alumnos -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-list me-2"></i>Lista de Alumnos
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Programa</th>
+                                            <th>Modalidad</th>
+                                            <th>CURP</th>
+                                            <th>Convenio</th>
+                                            <th>Monto</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="filteredStudentsTable">
+                                        <tr>
+                                            <td colspan="9" class="text-center text-muted py-4">
+                                                <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                                                <br>No hay alumnos para mostrar
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth.js"></script>
+    <script src="db-config.js"></script>
+    <script>
+        // Verificar autenticación al cargar la página
+        window.addEventListener('load', function() {
+            // Usar el sistema de autenticación
+            if (!gardenAuth.protectPage()) {
+                return;
+            }
+            
+            // Mostrar información del usuario
+            const userInfo = gardenAuth.getUserInfo();
+            if (userInfo && userInfo.username) {
+                document.getElementById('adminUserName').textContent = `Admin: ${userInfo.username}`;
+            }
+        });
+
+        // Función de logout
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                gardenAuth.logout();
+            }
+        }
+
+        // 🗄️ Sistema de Base de Datos Mejorado
+        let students = [];
+        let studentIdCounter = 1;
+        let dbStatus = { connected: false, lastSync: null };
+
+        // 🚀 Inicializar sistema con base de datos
+        async function initializeSystem() {
+            try {
+                // Mostrar estado de carga
+                showAlert('success', '🔌 Conectando a la base de datos...', false);
+                
+                // Inicializar base de datos
+                const dbConnected = await gardenDB.initialize();
+                
+                if (dbConnected) {
+                    // Cargar datos desde la base de datos
+                    students = await gardenDB.loadStudents();
+                    
+                    // Asegurarse de que todos los estudiantes tengan ID numérico
+                    students.forEach((student, index) => {
+                        if (!student.id || isNaN(parseInt(student.id))) {
+                            student.id = index + 1;
+                        } else {
+                            student.id = parseInt(student.id);
+                        }
+                    });
+                    
+                    // Actualizar la lista en la base de datos para corregir IDs
+                    gardenDB.students = students;
+                    
+                    studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
+                    
+                    showAlert('success', `✅ Base de datos conectada. ${students.length} estudiantes cargados`);
+                    updateDatabaseStatus(true);
+                } else {
+                    throw new Error('No se pudo conectar a la base de datos');
+                }
+            } catch (error) {
+                console.warn('⚠️ Usando modo offline:', error);
+                // Cargar datos locales como fallback
+                const localData = localStorage.getItem('garden_students');
+                students = localData ? JSON.parse(localData) : [];
+                
+                // Asegurarse de que todos los estudiantes tengan ID numérico
+                students.forEach((student, index) => {
+                    if (!student.id || isNaN(parseInt(student.id))) {
+                        student.id = index + 1;
+                    } else {
+                        student.id = parseInt(student.id);
+                    }
+                });
+                
+                studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
+                
+                showAlert('error', `⚠️ Modo offline activado. ${students.length} estudiantes locales`);
+                updateDatabaseStatus(false);
+            }
+            
+            // Actualizar interfaz
+            updateStats();
+            renderStudents();
+            initializeFilters();
+        }
+
+        // 📊 Actualizar estado de la base de datos en la UI
+        function updateDatabaseStatus(connected) {
+            dbStatus = gardenDB.getConnectionStatus();
+            
+            // Actualizar indicador en la navbar
+            const syncButton = document.getElementById('syncToggle');
+            if (syncButton) {
+                if (connected) {
+                    syncButton.className = 'btn btn-outline-success btn-sm me-2';
+                    syncButton.innerHTML = '<i class="fas fa-database me-1"></i>DB: Conectada';
+                } else {
+                    syncButton.className = 'btn btn-outline-warning btn-sm me-2';
+                    syncButton.innerHTML = '<i class="fas fa-database me-1"></i>DB: Offline';
+                }
+            }
+        }
+
+        // Manejar el checkbox del convenio
+        document.getElementById('convenioUniversidades').addEventListener('change', function() {
+            const isChecked = this.checked;
+            const convenioInfo = document.getElementById('convenioInfo');
+            const montoPago = document.getElementById('montoPago');
+            const conceptoPago = document.getElementById('conceptoPago');
+            
+            if (isChecked) {
+                convenioInfo.classList.remove('d-none');
+                montoPago.value = '1000.00';
+                conceptoPago.value = 'Convenio Universidades del Bienestar';
+            } else {
+                convenioInfo.classList.add('d-none');
+                montoPago.value = '';
+                conceptoPago.value = '';
+            }
+        });
+
+        // Manejar el envío del formulario (con base de datos)
+        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const studentData = {
+                nombres: formData.get('nombres') || 'Sin especificar',
+                apellidos: formData.get('apellidos') || 'Sin especificar',
+                fechaNacimiento: formData.get('fechaNacimiento') || '',
+                curp: (formData.get('curp') || '').toUpperCase(),
+                programa: formData.get('programa') || 'Sin especificar',
+                modalidad: formData.get('modalidad') || 'Sin especificar',
+                convenio: formData.has('convenioUniversidades'),
+                montoPago: formData.get('montoPago') || '0.00',
+                conceptoPago: formData.get('conceptoPago') || '',
+                fechaRegistro: new Date().toISOString().split('T')[0]
+            };
+            
+            // Validar CURP único solo si se proporcionó
+            if (studentData.curp && students.some(s => s.curp === studentData.curp && s.curp !== '')) {
+                showAlert('error', 'Ya existe un alumno registrado con esta CURP');
+                return;
+            }
+            
+            try {
+                // Mostrar estado de guardado
+                showAlert('success', '💾 Guardando alumno en la base de datos...', false);
+                
+                // Guardar en la base de datos
+                const savedStudent = await gardenDB.saveStudent(studentData);
+                
+                // Actualizar lista local
+                students.push(savedStudent);
+                studentIdCounter = Math.max(studentIdCounter, savedStudent.id + 1);
+                
+                // Mostrar éxito
+                showAlert('success', `✅ ${savedStudent.nombres} ${savedStudent.apellidos} registrado exitosamente`);
+                
+                // Limpiar formulario
+                this.reset();
+                document.getElementById('convenioInfo').classList.add('d-none');
+                document.getElementById('montoPago').value = '';
+                document.getElementById('conceptoPago').value = '';
+                
+                // Actualizar interfaz
+                renderStudents();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error guardando estudiante:', error);
+                showAlert('error', 'Error al guardar en la base de datos. Los datos se guardaron localmente.');
+                
+                // Guardar localmente como fallback
+                const localStudent = {
+                    ...studentData,
+                    id: studentIdCounter++,
+                    created_at: new Date().toISOString()
+                };
+                
+                students.push(localStudent);
+                localStorage.setItem('garden_students', JSON.stringify(students));
+                
+                // Actualizar interfaz
+                renderStudents();
+                updateStats();
+            }
+        });
+
+        // Formatear fecha para mostrar
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Calcular edad
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+
+        // Renderizar lista de estudiantes
+        function renderStudents() {
+            const studentList = document.getElementById('studentList');
+            
+            if (students.length === 0) {
+                studentList.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-user-plus fa-3x mb-3 opacity-50"></i>
+                        <h6>No hay alumnos registrados</h6>
+                        <p class="small">Los alumnos registrados aparecerán aquí</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const studentsHtml = students.map((student, index) => `
+                <div class="student-card">
+                    <div class="card-body py-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title mb-1">
+                                    <i class="fas fa-user-circle me-1 text-primary"></i>
+                                    ${student.nombres} ${student.apellidos}
+                                </h6>
+                                <div class="small text-muted mb-2">
+                                    <div><i class="fas fa-calendar me-1"></i>Edad: ${calculateAge(student.fechaNacimiento)} años</div>
+                                    <div><i class="fas fa-id-card me-1"></i>CURP: ${student.curp}</div>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="badge bg-info">${student.programa}</span>
+                                    <span class="badge bg-secondary ms-1">${student.modalidad}</span>
+                                    ${student.convenio ? '<span class="badge bg-success ms-1"><i class="fas fa-handshake me-1"></i>Convenio</span>' : ''}
+                                </div>
+                                ${student.convenio ? `
+                                    <div class="small text-success">
+                                        <i class="fas fa-dollar-sign me-1"></i>
+                                        Pago: $${parseFloat(student.montoPago).toFixed(2)} - ${student.conceptoPago}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeStudent(${index})" title="Eliminar alumno">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            studentList.innerHTML = studentsHtml;
+            
+            // Actualizar también los filtros si existen
+            if (typeof applyFilters === 'function') {
+                applyFilters();
+            }
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const totalCount = students.length;
+            const convenioCount = students.filter(s => s.convenio).length;
+            const totalAmount = students
+                .filter(s => s.convenio)
+                .reduce((sum, s) => sum + parseFloat(s.montoPago || 0), 0);
+            
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('convenioCount').textContent = convenioCount;
+            document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+        }
+
+        // Eliminar estudiante
+        function removeStudent(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este alumno?')) {
+                const student = students[index];
+                students.splice(index, 1);
+                localStorage.setItem('garden_students', JSON.stringify(students));
+                
+                renderStudents();
+                updateStats();
+                
+                showAlert('success', `Alumno ${student.nombres} ${student.apellidos} eliminado`);
+            }
+        }
+
+        // Limpiar formulario
+        function clearForm() {
+            document.getElementById('studentForm').reset();
+            document.getElementById('convenioInfo').classList.add('d-none');
+            document.getElementById('montoPago').value = '';
+            document.getElementById('conceptoPago').value = '';
+            hideAlerts();
+        }
+
+        // Mostrar alertas
+        function showAlert(type, message, autoHide = true) {
+            hideAlerts();
+            
+            const alertElement = document.getElementById(type + 'Alert');
+            const messageElement = document.getElementById(type + 'Message');
+            
+            messageElement.textContent = message;
+            alertElement.classList.remove('d-none');
+            
+            // Ocultar automáticamente después de 5 segundos si autoHide es true
+            if (autoHide) {
+                setTimeout(() => {
+                    alertElement.classList.add('d-none');
+                }, 5000);
+            }
+        }
+
+        // Ocultar alertas
+        function hideAlerts() {
+            document.getElementById('successAlert').classList.add('d-none');
+            document.getElementById('errorAlert').classList.add('d-none');
+        }
+
+        // Validar CURP en tiempo real
+        document.getElementById('curp').addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+        
+        // Validar solo letras en nombres y apellidos
+        document.getElementById('nombres').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+        
+        document.getElementById('apellidos').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+
+        // Exportar datos (función adicional)
+        function exportData() {
+            const dataStr = JSON.stringify(students, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'garden_university_students.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Importar datos (función adicional)
+        function importData(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedStudents = JSON.parse(e.target.result);
+                        students = importedStudents;
+                        localStorage.setItem('garden_students', JSON.stringify(students));
+                        renderStudents();
+                        updateStats();
+                        showAlert('success', 'Datos importados exitosamente');
+                    } catch (error) {
+                        showAlert('error', 'Error al importar datos: archivo inválido');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // 🔄 Función de sincronización manual
+        async function syncData() {
+            const syncButton = document.getElementById('syncButton');
+            const originalContent = syncButton.innerHTML;
+            
+            // Cambiar el botón mientras sincroniza
+            syncButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sincronizando...';
+            syncButton.disabled = true;
+            
+            try {
+                // Cargar datos desde la nube
+                const cloudData = await loadFromCloudStorage();
+                
+                // Actualizar datos locales
+                students = cloudData.students || [];
+                studentIdCounter = cloudData.counter || 1;
+                
+                // Actualizar interfaz
+                renderStudents();
+                updateStats();
+                
+                showAlert('success', '✅ Datos sincronizados exitosamente desde todos los dispositivos');
+            } catch (error) {
+                showAlert('error', '❌ Error al sincronizar. Verifica tu conexión a internet');
+            } finally {
+                // Restaurar el botón
+                setTimeout(() => {
+                    syncButton.innerHTML = originalContent;
+                    syncButton.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // 🔍 SISTEMA DE FILTROS Y REPORTES
+        
+        // Variable para almacenar alumnos filtrados
+        let filteredStudents = [];
+        
+        // Aplicar filtros
+        function applyFilters() {
+            const filterCarrera = document.getElementById('filterCarrera').value;
+            const filterModalidad = document.getElementById('filterModalidad').value;
+            const filterConvenio = document.getElementById('filterConvenio').value;
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
+            
+            filteredStudents = students.filter(student => {
+                // Filtro por programa
+                if (filterCarrera && student.programa !== filterCarrera) return false;
+                
+                // Filtro por modalidad
+                if (filterModalidad && student.modalidad !== filterModalidad) return false;
+                
+                // Filtro por convenio
+                if (filterConvenio !== '') {
+                    const hasConvenio = filterConvenio === 'true';
+                    if (student.convenio !== hasConvenio) return false;
+                }
+                
+                // Filtro por búsqueda
+                if (searchTerm) {
+                    const fullName = `${student.nombres} ${student.apellidos}`.toLowerCase();
+                    const curp = (student.curp || '').toLowerCase();
+                    if (!fullName.includes(searchTerm) && !curp.includes(searchTerm)) return false;
+                }
+                
+                return true;
+            });
+            
+            updateFilteredView();
+            updateProgramStats();
+        }
+        
+        // Actualizar vista filtrada
+        function updateFilteredView() {
+            const tableBody = document.getElementById('filteredStudentsTable');
+            const countBadge = document.getElementById('filteredCount');
+            
+            countBadge.textContent = `${filteredStudents.length} alumnos encontrados`;
+            
+            if (filteredStudents.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                            <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
+                            <br>No hay alumnos que coincidan con los filtros
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = filteredStudents.map(student => `
+                <tr>
+                    <td><span class="badge bg-secondary">${student.id}</span></td>
+                    <td>
+                        <strong>${student.nombres} ${student.apellidos}</strong>
+                        ${student.fechaNacimiento ? `<br><small class="text-muted">Nacimiento: ${formatDate(student.fechaNacimiento)}</small>` : ''}
+                    </td>
+                    <td>
+                        <span class="badge bg-primary">${student.programa}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-info">${student.modalidad}</span>
+                    </td>
+                    <td>
+                        <code class="small">${student.curp || 'No especificado'}</code>
+                    </td>
+                    <td>
+                        ${student.convenio ? 
+                            '<span class="badge bg-success"><i class="fas fa-check"></i> Sí</span>' : 
+                            '<span class="badge bg-secondary"><i class="fas fa-times"></i> No</span>'
+                        }
+                    </td>
+                    <td>
+                        <strong class="text-success">$${student.montoPago}</strong>
+                    </td>
+                    <td>
+                        <small>${formatDate(student.fechaRegistro)}</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetails(${student.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteStudent(${student.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Actualizar estadísticas por programa
+        function updateProgramStats() {
+            const programsContainer = document.getElementById('programStats');
+            const programCounts = {};
+            
+            // Contar alumnos por programa
+            filteredStudents.forEach(student => {
+                const programa = student.programa || 'Sin especificar';
+                if (!programCounts[programa]) {
+                    programCounts[programa] = { total: 0, convenio: 0, monto: 0 };
+                }
+                programCounts[programa].total++;
+                if (student.convenio) {
+                    programCounts[programa].convenio++;
+                    programCounts[programa].monto += parseFloat(student.montoPago || 0);
+                }
+            });
+            
+            const programCards = Object.entries(programCounts).map(([programa, stats]) => `
+                <div class="col-md-4 mb-3">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h6 class="card-title text-primary">
+                                <i class="fas fa-graduation-cap me-1"></i>${programa}
+                            </h6>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="fw-bold text-primary">${stats.total}</div>
+                                    <small class="text-muted">Total</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-success">${stats.convenio}</div>
+                                    <small class="text-muted">Convenio</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-success">$${stats.monto.toFixed(2)}</div>
+                                    <small class="text-muted">Monto</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            programsContainer.innerHTML = programCards || `
+                <div class="col-12 text-center text-muted">
+                    <i class="fas fa-chart-pie fa-2x mb-2 opacity-50"></i>
+                    <br>No hay datos para mostrar
+                </div>
+            `;
+        }
+        
+        // Limpiar filtros
+        function clearFilters() {
+            document.getElementById('filterCarrera').value = '';
+            document.getElementById('filterModalidad').value = '';
+            document.getElementById('filterConvenio').value = '';
+            document.getElementById('searchStudent').value = '';
+            applyFilters();
+        }
+        
+        // Ver detalles del estudiante
+        function viewStudentDetails(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+            
+            alert(`Detalles del Alumno:
+            
+ID: ${student.id}
+Nombre: ${student.nombres} ${student.apellidos}
+Fecha de Nacimiento: ${student.fechaNacimiento || 'No especificado'}
+CURP: ${student.curp || 'No especificado'}
+Programa: ${student.programa}
+Modalidad: ${student.modalidad}
+Convenio: ${student.convenio ? 'Sí' : 'No'}
+Monto de Pago: $${student.montoPago}
+Concepto: ${student.conceptoPago || 'N/A'}
+Fecha de Registro: ${formatDate(student.fechaRegistro)}`);
+        }
+        
+        // Eliminar estudiante
+        async function deleteStudent(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este alumno?')) return;
+            
+            const index = students.findIndex(s => s.id === id);
+            if (index === -1) return;
+            
+            const studentName = `${students[index].nombres} ${students[index].apellidos}`;
+            students.splice(index, 1);
+            
+            // Guardar cambios
+            const saveData = { students: students, counter: studentIdCounter };
+            await saveToCloudStorage(saveData);
+            
+            // Actualizar vistas
+            renderStudents();
+            updateStats();
+            applyFilters();
+            
+            showAlert('success', `Alumno ${studentName} eliminado exitosamente`);
+        }
+        
+        // Exportar a CSV
+        function exportToCSV() {
+            if (filteredStudents.length === 0) {
+                alert('No hay alumnos para exportar');
+                return;
+            }
+            
+            const headers = ['ID', 'Nombres', 'Apellidos', 'Fecha Nacimiento', 'CURP', 'Programa', 'Modalidad', 'Convenio', 'Monto Pago', 'Concepto Pago', 'Fecha Registro'];
+            
+            const csvContent = [
+                headers.join(','),
+                ...filteredStudents.map(student => [
+                    student.id,
+                    `"${student.nombres}"`,
+                    `"${student.apellidos}"`,
+                    student.fechaNacimiento || '',
+                    student.curp || '',
+                    `"${student.programa}"`,
+                    `"${student.modalidad}"`,
+                    student.convenio ? 'Sí' : 'No',
+                    student.montoPago,
+                    `"${student.conceptoPago || ''}"`,
+                    student.fechaRegistro
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `alumnos_garden_university_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+        
+        // Generar reporte
+        function generateReport() {
+            const total = filteredStudents.length;
+            const conConvenio = filteredStudents.filter(s => s.convenio).length;
+            const montoTotal = filteredStudents.reduce((sum, s) => sum + parseFloat(s.montoPago || 0), 0);
+            
+            const programas = {};
+            filteredStudents.forEach(s => {
+                const prog = s.programa || 'Sin especificar';
+                programas[prog] = (programas[prog] || 0) + 1;
+            });
+            
+            const reporteTexto = `📊 REPORTE DE ALUMNOS - GARDEN UNIVERSITY
+📅 Fecha: ${new Date().toLocaleDateString('es-MX')}
+
+📈 RESUMEN GENERAL:
+• Total de alumnos: ${total}
+• Con convenio: ${conConvenio} (${total > 0 ? ((conConvenio/total)*100).toFixed(1) : 0}%)
+• Sin convenio: ${total - conConvenio}
+• Monto total convenios: $${montoTotal.toFixed(2)} MXN
+
+📚 DISTRIBUCIÓN POR PROGRAMA:
+${Object.entries(programas).map(([prog, count]) => 
+    `• ${prog}: ${count} alumno${count !== 1 ? 's' : ''}`
+).join('\n')}
+
+🎯 GENERADO POR: ${document.getElementById('adminUserName').textContent}`;
+            
+            // Mostrar reporte en una ventana nueva
+            const ventana = window.open('', '_blank');
+            ventana.document.write(`
+                <html>
+                    <head>
+                        <title>Reporte Garden University</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            pre { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <pre>${reporteTexto}</pre>
+                        <button onclick="window.print()">Imprimir</button>
+                        <button onclick="window.close()">Cerrar</button>
+                    </body>
+                </html>
+            `);
+        }
+        
+        // Inicializar filtros cuando se cargan los datos
+        function initializeFilters() {
+            applyFilters();
+        }
+        
+        // Sobrescribir la función initializeData para incluir filtros
+        // Función para alternar reconexión a la base de datos
+        async function toggleSync() {
+            const button = document.getElementById('syncToggle');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Conectando...';
+            button.disabled = true;
+            
+            try {
+                const connected = await gardenDB.initialize();
+                
+                if (connected) {
+                    // Sincronizar datos actuales
+                    if (students.length > 0) {
+                        await gardenDB.syncToDatabase();
+                    }
+                    
+                    showAlert('success', '✅ Base de datos conectada y sincronizada');
+                    updateDatabaseStatus(true);
+                } else {
+                    throw new Error('No se pudo conectar');
+                }
+            } catch (error) {
+                showAlert('error', '❌ Error conectando a la base de datos. Modo offline activo.');
+                updateDatabaseStatus(false);
+            }
+            
+            button.disabled = false;
+        }
+
+        // Inicializar sistema al cargar la página
+        window.addEventListener('load', function() {
+            initializeSystem();
+        });
+
+        const originalInitializeData = initializeSystem;
+        initializeData = async function() {
+            await originalInitializeData();
+            initializeFilters();
+        };
+    </script>
+</body>
+</html>

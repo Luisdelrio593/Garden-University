@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden University - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1a5f4f, #2d8a6a) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .dashboard-container {
+            margin-top: 30px;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        .menu-card {
+            border: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            height: 200px;
+            cursor: pointer;
+        }
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .menu-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .menu-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .menu-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: none;
+            padding: 20px;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 20px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .welcome-card {
+                margin-bottom: 30px;
+                border-radius: 15px;
+            }
+            .welcome-card h1 {
+                font-size: 1.8rem;
+            }
+            .welcome-card p {
+                font-size: 0.9rem;
+            }
+            .menu-card {
+                height: 160px;
+                margin-bottom: 20px;
+            }
+            .menu-icon {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+            }
+            .menu-title {
+                font-size: 1.1rem;
+            }
+            .menu-description {
+                font-size: 0.8rem;
+            }
+            .stats-card {
+                margin-bottom: 15px;
+                padding: 15px;
+            }
+            .stats-number {
+                font-size: 2rem;
+            }
+            .stats-label {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-container {
+                margin-top: 20px;
+            }
+            .container {
+                padding: 10px;
+            }
+            .welcome-card {
+                margin-bottom: 25px;
+                padding: 20px;
+                border-radius: 12px;
+            }
+            .welcome-card h1 {
+                font-size: 1.5rem;
+            }
+            .welcome-card p {
+                font-size: 0.85rem;
+            }
+            .menu-card {
+                height: 140px;
+                margin-bottom: 15px;
+            }
+            .menu-icon {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            .menu-title {
+                font-size: 1rem;
+            }
+            .menu-description {
+                font-size: 0.75rem;
+            }
+            .stats-card {
+                margin-bottom: 12px;
+                padding: 12px;
+            }
+            .stats-number {
+                font-size: 1.7rem;
+            }
+            .stats-label {
+                font-size: 0.75rem;
+            }
+            .row {
+                margin: 0 -5px;
+            }
+            .col-6, .col-md-3 {
+                padding: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <svg class="navbar-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="95" fill="#1a5f4f" stroke="#ff8c00" stroke-width="6"/>
+                    <text x="100" y="130" text-anchor="middle" font-family="serif" font-size="80" font-weight="bold" fill="white" stroke="#ff8c00" stroke-width="2">GU</text>
+                </svg>
+                Garden University
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user me-2"></i>
+                    <span id="userEmail"></span>
+                </span>
+                <button onclick="Auth.logout()" class="btn logout-btn">
+                    <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        <!-- Welcome Card -->
+        <div class="card welcome-card">
+            <div class="card-body text-center py-5">
+                <h1><i class="fas fa-home me-3"></i>Bienvenido al Panel de Administración</h1>
+                <p class="lead mb-0">Sistema de Gestión Universitaria Garden University</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mb-5">
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="statsStudents">0</div>
+                    <div class="text-muted">Estudiantes Activos</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="statsTeachers">0</div>
+                    <div class="text-muted">Docentes</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="statsAdministratives">0</div>
+                    <div class="text-muted">Personal Admin.</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="statsPrograms">0</div>
+                    <div class="text-muted">Programas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='alumnos.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h5 class="menu-title">Alumnos</h5>
+                        <p class="menu-description">Gestión de estudiantes, inscripciones y expedientes académicos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='docentes.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h5 class="menu-title">Docentes</h5>
+                        <p class="menu-description">Administración de profesores y datos académicos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='materias.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h5 class="menu-title">Materias</h5>
+                        <p class="menu-description">Gestión del catálogo de materias por cuatrimestre</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='asignaciones.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h5 class="menu-title">Asignaciones</h5>
+                        <p class="menu-description">Asignación de materias a docentes por grupos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='administrativos.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h5 class="menu-title">Administrativos</h5>
+                        <p class="menu-description">Gestión de personal administrativo y recursos humanos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card menu-card" onclick="location.href='programas.html'">
+                    <div class="card-body">
+                        <div class="menu-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h5 class="menu-title">Programas de Estudio</h5>
+                        <p class="menu-description">Administración de carreras, materias y planes de estudio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/database.js"></script>
+    <script>
+        // Verificar autenticación
+        if (!Auth.requireAuth()) {
+            // Redireccionar se maneja en requireAuth
+        } else {
+            // Cargar datos del usuario
+            const currentUser = Auth.getCurrentUser();
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            // Cargar estadísticas
+            const stats = Database.getStats();
+            document.getElementById('statsStudents').textContent = stats.students;
+            document.getElementById('statsTeachers').textContent = stats.teachers;
+            document.getElementById('statsAdministratives').textContent = stats.administratives;
+            document.getElementById('statsPrograms').textContent = stats.programs;
+        }
+    </script>
+</body>
+</html>
