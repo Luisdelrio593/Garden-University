@@ -1,35 +1,19 @@
 [build]
-  publish = "netlify-deploy"
-  command = ""
+  base = "."
+  publish = "target"
+  command = "mvn clean package -DskipTests"
 
 [build.environment]
-  NODE_VERSION = "18"
+  JAVA_VERSION = "17"
+  MAVEN_VERSION = "3.8.6"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+[context.production]
+  environment = { DATABASE_URL = "jdbc:postgresql://localhost:5432/gardenuniversity", DATABASE_DRIVER = "org.postgresql.Driver", DATABASE_PLATFORM = "org.hibernate.dialect.PostgreSQLDialect" }
 
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000"
-
-[[headers]]
-  for = "*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+[context.deploy-preview]
+  environment = { DATABASE_URL = "jdbc:h2:mem:gardenuniversity", DATABASE_DRIVER = "org.h2.Driver", DATABASE_PLATFORM = "org.hibernate.dialect.H2Dialect" }

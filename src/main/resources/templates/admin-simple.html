@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden University - Panel Administrativo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid #3498db;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            font-size: 0.9rem;
+            padding: 8px 15px;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .students-table {
+            margin-top: 30px;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .table th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-programa {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge-modalidad {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            .table th,
+            .table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏛️ Garden University</h1>
+            <p>Panel de Administración - Sistema de Registro de Alumnos</p>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalStudents}">0</div>
+                <div>Alumnos Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div>Modalidades</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div>Programas</div>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="content">
+            <!-- Alertas -->
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+            
+            <!-- Formulario de registro -->
+            <div class="form-section">
+                <h2>📝 Registrar Nuevo Alumno</h2>
+                <form th:action="@{/admin/students/save}" method="post" th:object="${newStudent}">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nombres">Nombres *</label>
+                            <input type="text" id="nombres" th:field="*{nombres}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="apellidos">Apellidos *</label>
+                            <input type="text" id="apellidos" th:field="*{apellidos}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="correoInstitucional">Correo Institucional *</label>
+                            <input type="email" id="correoInstitucional" th:field="*{correoInstitucional}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="programaEstudios">Programa de Estudios *</label>
+                            <select id="programaEstudios" th:field="*{programaEstudios}" class="form-control" required>
+                                <option value="">Seleccionar programa...</option>
+                                <option th:each="programa : ${programas}" th:value="${programa}" th:text="${programa}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="modalidadEstudios">Modalidad *</label>
+                            <select id="modalidadEstudios" th:field="*{modalidadEstudios}" class="form-control" required>
+                                <option value="">Seleccionar modalidad...</option>
+                                <option th:each="modalidad : ${modalidades}" th:value="${modalidad}" th:text="${modalidad}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="celular">Celular</label>
+                            <input type="tel" id="celular" th:field="*{celular}" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">✅ Registrar Alumno</button>
+                </form>
+            </div>
+            
+            <!-- Lista de alumnos -->
+            <div class="students-table">
+                <h2>👥 Alumnos Registrados</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre Completo</th>
+                            <th>Correo Institucional</th>
+                            <th>Programa</th>
+                            <th>Modalidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="student : ${students}">
+                            <td th:text="${student.nombreCompleto}"></td>
+                            <td th:text="${student.correoInstitucional}"></td>
+                            <td>
+                                <span class="badge badge-programa" th:text="${student.programaEstudios}"></span>
+                            </td>
+                            <td>
+                                <span class="badge badge-modalidad" th:text="${student.modalidadEstudios}"></span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/students/delete/{id}(id=${student.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de desactivar este alumno?')">
+                                        🗑️ Desactivar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(students)}">
+                            <td colspan="5" style="text-align: center; padding: 30px; color: #6c757d;">
+                                No hay alumnos registrados aún
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh cada 30 segundos para mantener datos actualizados
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
