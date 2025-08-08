@@ -71,25 +71,45 @@ class GardenDatabase {
     // 💾 Guardar un estudiante en la base de datos
     async saveStudent(studentData) {
         try {
+            // Generar ID único
+            const studentId = this.generateId();
+            
             // Agregar ID único y timestamp
             const student = {
                 ...studentData,
-                id: this.generateId(),
+                id: studentId,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
             };
+
+            // Verificar que no existe duplicado por CURP
+            const existingStudent = this.students.find(s => s.curp === student.curp);
+            if (existingStudent) {
+                throw new Error('Ya existe un estudiante con esta CURP');
+            }
 
             // Agregar a la lista local
             this.students.push(student);
 
             // Guardar en la base de datos
-            await this.syncToDatabase();
+            const syncResult = await this.syncToDatabase();
+            
+            if (!syncResult) {
+                // Si falla la sincronización, guardar localmente
+                localStorage.setItem('garden_students', JSON.stringify(this.students));
+            }
 
             console.log('💾 Estudiante guardado exitosamente:', student.nombres, student.apellidos);
             return student;
         } catch (error) {
             console.error('❌ Error guardando estudiante:', error);
-            // Guardar localmente como fallback
+            
+            // Si el error es por duplicado, no guardarlo
+            if (error.message.includes('CURP')) {
+                throw error;
+            }
+            
+            // Para otros errores, intentar guardar localmente
             localStorage.setItem('garden_students', JSON.stringify(this.students));
             throw error;
         }
@@ -191,7 +211,9 @@ class GardenDatabase {
 
     // 🆔 Generar ID único
     generateId() {
-        return Date.now() + Math.random().toString(36).substr(2, 9);
+        // Generar ID numérico secuencial
+        const maxId = this.students.length > 0 ? Math.max(...this.students.map(s => parseInt(s.id) || 0)) : 0;
+        return maxId + 1;
     }
 
     // 🏥 Verificar estado de la conexión

@@ -588,6 +588,19 @@
                 if (dbConnected) {
                     // Cargar datos desde la base de datos
                     students = await gardenDB.loadStudents();
+                    
+                    // Asegurarse de que todos los estudiantes tengan ID numérico
+                    students.forEach((student, index) => {
+                        if (!student.id || isNaN(parseInt(student.id))) {
+                            student.id = index + 1;
+                        } else {
+                            student.id = parseInt(student.id);
+                        }
+                    });
+                    
+                    // Actualizar la lista en la base de datos para corregir IDs
+                    gardenDB.students = students;
+                    
                     studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
                     
                     showAlert('success', `✅ Base de datos conectada. ${students.length} estudiantes cargados`);
@@ -600,6 +613,16 @@
                 // Cargar datos locales como fallback
                 const localData = localStorage.getItem('garden_students');
                 students = localData ? JSON.parse(localData) : [];
+                
+                // Asegurarse de que todos los estudiantes tengan ID numérico
+                students.forEach((student, index) => {
+                    if (!student.id || isNaN(parseInt(student.id))) {
+                        student.id = index + 1;
+                    } else {
+                        student.id = parseInt(student.id);
+                    }
+                });
+                
                 studentIdCounter = students.length > 0 ? Math.max(...students.map(s => s.id || 0)) + 1 : 1;
                 
                 showAlert('error', `⚠️ Modo offline activado. ${students.length} estudiantes locales`);
