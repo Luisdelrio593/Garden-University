@@ -1,0 +1,9 @@
+# Este archivo específicamente evita que Netlify detecte Maven
+# SOLO para el directorio netlify-deploy
+
+[build]
+  command = ""
+  publish = "."
+
+[build.environment]
+  DISABLE_PREBUILD = "true"

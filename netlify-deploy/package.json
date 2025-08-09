@@ -1,15 +1,23 @@
 {
-  "name": "garden-university",
+  "name": "garden-university-static",
   "version": "1.0.0",
-  "description": "Garden University - Sistema de registro de alumnos",
+  "description": "Garden University - Sistema de registro de alumnos (sitio estático)",
   "main": "index.html",
+  "type": "module",
   "scripts": {
-    "start": "echo 'Sitio estático - abrir index.html en navegador'",
-    "build": "echo 'No build required for static site'"
+    "start": "echo 'Sitio estático - no requiere servidor'",
+    "build": "echo 'No build process required - static files only'",
+    "dev": "echo 'Open index.html in browser'",
+    "serve": "echo 'Static site - no server needed'"
   },
-  "keywords": ["university", "registration", "static"],
+  "keywords": ["university", "registration", "static", "html", "css", "javascript"],
   "author": "Garden University",
   "license": "MIT",
+  "engines": {
+    "node": "18.x"
+  },
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {},
+  "buildpacks": [],
+  "staticFiles": ["index.html", "dashboard.html", "auth.js", "db-config.js", "_redirects"]
 }

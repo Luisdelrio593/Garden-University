@@ -1,3 +1,11 @@
+# Evitar que se incluyan archivos que confundan a Netlify
+../pom.xml
+../mvnw
+../mvnw.cmd
+../.mvn/
+../src/
+../target/
+
 # Archivos que pueden causar conflictos de build
 *.class
 *.jar
