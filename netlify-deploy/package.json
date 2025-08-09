@@ -1,0 +1,15 @@
+{
+  "name": "garden-university",
+  "version": "1.0.0",
+  "description": "Garden University - Sistema de registro de alumnos",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Sitio estático - abrir index.html en navegador'",
+    "build": "echo 'No build required for static site'"
+  },
+  "keywords": ["university", "registration", "static"],
+  "author": "Garden University",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}

@@ -1,16 +1,21 @@
 [build]
-  # No necesitamos comando de build para sitios estáticos
+  # Comando vacío para sitio estático - NO usar Maven
   command = ""
   
-  # La carpeta que contiene los archivos del sitio web
-  publish = "."
+  # Directorio base para el build
+  base = "netlify-deploy"
   
-  # Configuración específica para evitar conflictos con otros archivos del repo
-  ignore = "/bin"
+  # La carpeta que contiene los archivos del sitio web
+  publish = "netlify-deploy"
+  
+  # Ignorar archivos que pueden causar detección de Maven
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . || exit 0"
 
 [build.environment]
-  # Variables de entorno (si son necesarias)
-  NODE_VERSION = "18"
+  # Desactivar auto-detección de herramientas de build
+  DISABLE_PREBUILD = "true"
+  # Forzar que NO use Maven
+  MAVEN_OPTS = ""
 
 # Configuración de redirects para SPA
 [[redirects]]
