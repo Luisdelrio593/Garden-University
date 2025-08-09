@@ -69,6 +69,30 @@
             box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
         }
         
+        /* Estilos específicos para el botón Convenio Bienestar */
+        .btn-outline-success {
+            border: 2px solid #28a745;
+            color: #28a745;
+            background: transparent;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-success:hover {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #28a745;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-outline-success small {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        
         .convenience-badge {
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
@@ -317,22 +341,24 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Convenio con Universidades del Bienestar -->
+                                    <!-- Convenio Bienestar -->
                                     <div class="mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="convenioUniversidades" name="convenioUniversidades">
-                                            <label class="form-check-label" for="convenioUniversidades">
-                                                <i class="fas fa-handshake me-1"></i>
-                                                <strong>Convenio con "Universidades del Bienestar"</strong>
-                                                <br>
-                                                <small class="text-muted">Al activar esta opción, se asignará automáticamente un pago de $1,000.00</small>
-                                            </label>
+                                        <div class="d-grid gap-2">
+                                            <button type="button" class="btn btn-outline-success" id="convenioBienestarBtn" onclick="toggleConvenioBienestar()">
+                                                <i class="fas fa-handshake me-2"></i>Aplicar Convenio Bienestar
+                                                <small class="d-block">Beca automática de $1,000.00</small>
+                                            </button>
                                         </div>
-                                        <div id="convenioInfo" class="d-none">
-                                            <span class="convenience-badge">
-                                                <i class="fas fa-check me-1"></i>Pago asignado: $1,000.00 MXN
-                                            </span>
+                                        <div id="convenioInfo" class="d-none mt-2">
+                                            <div class="alert alert-success d-flex align-items-center">
+                                                <i class="fas fa-check-circle me-2"></i>
+                                                <div>
+                                                    <strong>¡Convenio Bienestar Activado!</strong><br>
+                                                    <small>Beca aplicada: $1,000.00 MXN</small>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <input type="hidden" id="convenioUniversidades" name="convenioUniversidades" value="false">
                                     </div>
                                     
                                     <!-- Información de Pago -->
@@ -652,23 +678,37 @@
             }
         }
 
-        // Manejar el checkbox del convenio
-        document.getElementById('convenioUniversidades').addEventListener('change', function() {
-            const isChecked = this.checked;
+        // Variable para controlar el estado del convenio
+        let convenioBienestarActivo = false;
+
+        // Función para activar/desactivar el Convenio Bienestar
+        function toggleConvenioBienestar() {
+            const button = document.getElementById('convenioBienestarBtn');
             const convenioInfo = document.getElementById('convenioInfo');
             const montoPago = document.getElementById('montoPago');
             const conceptoPago = document.getElementById('conceptoPago');
+            const hiddenInput = document.getElementById('convenioUniversidades');
             
-            if (isChecked) {
+            convenioBienestarActivo = !convenioBienestarActivo;
+            
+            if (convenioBienestarActivo) {
+                // Activar convenio
+                button.className = 'btn btn-success';
+                button.innerHTML = '<i class="fas fa-check me-2"></i>Convenio Bienestar Activado<small class="d-block">Beca de $1,000.00 aplicada</small>';
                 convenioInfo.classList.remove('d-none');
                 montoPago.value = '1000.00';
-                conceptoPago.value = 'Convenio Universidades del Bienestar';
+                conceptoPago.value = 'Convenio Universidades del Bienestar - Beca';
+                hiddenInput.value = 'true';
             } else {
+                // Desactivar convenio
+                button.className = 'btn btn-outline-success';
+                button.innerHTML = '<i class="fas fa-handshake me-2"></i>Aplicar Convenio Bienestar<small class="d-block">Beca automática de $1,000.00</small>';
                 convenioInfo.classList.add('d-none');
                 montoPago.value = '';
                 conceptoPago.value = '';
+                hiddenInput.value = 'false';
             }
-        });
+        }
 
         // Manejar el envío del formulario (con base de datos)
         document.getElementById('studentForm').addEventListener('submit', async function(e) {
@@ -682,7 +722,7 @@
                 curp: (formData.get('curp') || '').toUpperCase(),
                 programa: formData.get('programa') || 'Sin especificar',
                 modalidad: formData.get('modalidad') || 'Sin especificar',
-                convenio: formData.has('convenioUniversidades'),
+                convenio: formData.get('convenioUniversidades') === 'true',
                 montoPago: formData.get('montoPago') || '0.00',
                 conceptoPago: formData.get('conceptoPago') || '',
                 fechaRegistro: new Date().toISOString().split('T')[0]
@@ -709,10 +749,7 @@
                 showAlert('success', `✅ ${savedStudent.nombres} ${savedStudent.apellidos} registrado exitosamente`);
                 
                 // Limpiar formulario
-                this.reset();
-                document.getElementById('convenioInfo').classList.add('d-none');
-                document.getElementById('montoPago').value = '';
-                document.getElementById('conceptoPago').value = '';
+                clearForm();
                 
                 // Actualizar interfaz
                 renderStudents();
@@ -848,9 +885,11 @@
         // Limpiar formulario
         function clearForm() {
             document.getElementById('studentForm').reset();
-            document.getElementById('convenioInfo').classList.add('d-none');
-            document.getElementById('montoPago').value = '';
-            document.getElementById('conceptoPago').value = '';
+            
+            // Resetear el estado del convenio
+            convenioBienestarActivo = true; // Lo ponemos en true para que toggleConvenioBienestar() lo ponga en false
+            toggleConvenioBienestar(); // Esto lo pondrá en false y reseteará la interfaz
+            
             hideAlerts();
         }
 
