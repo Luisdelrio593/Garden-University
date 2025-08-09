@@ -314,10 +314,13 @@
     <script src="auth.js"></script>
     <script>
         // Credenciales de administrador
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: 'G@rd3nU1'
-        };
+        const ADMIN_CREDENTIALS = [
+            { username: 'director', password: 'G@rd3n' },
+            { username: 'subdir', password: 'G@rd3n' },
+            { username: 'Escolar', password: 'G@rd3n' },
+            { username: 'Academico', password: 'G@rd3n' },
+            { username: 'Marketing', password: 'G@rd3n' }
+        ];
 
         // Verificar si ya está autenticado
         window.addEventListener('load', function() {
@@ -336,7 +339,11 @@
             const rememberMe = document.getElementById('rememberMe').checked;
             
             // Validar credenciales
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+            const validUser = ADMIN_CREDENTIALS.find(cred => 
+                cred.username === username && cred.password === password
+            );
+            
+            if (validUser) {
                 // Autenticación exitosa
                 localStorage.setItem('garden_auth', 'true');
                 localStorage.setItem('garden_admin_user', username);

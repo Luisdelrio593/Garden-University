@@ -318,8 +318,8 @@
                                                 </optgroup>
                                                 <optgroup label="Licenciaturas">
                                                     <option value="Enfermería">Enfermería</option>
-                                                    <option value="Derecho">Derecho</option>
                                                     <option value="Psicología">Psicología</option>
+                                                    <option value="Derecho">Derecho</option>
                                                     <option value="Gestión Empresarial">Gestión Empresarial</option>
                                                     <option value="Ingeniería Industrial">Ingeniería Industrial</option>
                                                     <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
@@ -335,8 +335,8 @@
                                             </label>
                                             <select class="form-select" id="modalidad" name="modalidad">
                                                 <option value="">Seleccionar modalidad...</option>
-                                                <option value="Escolarizada">Escolarizada</option>
-                                                <option value="Semiescolarizada">Semiescolarizada</option>
+                                                <option value="Escolarizado">Escolarizado</option>
+                                                <option value="Semi">Semi</option>
                                             </select>
                                         </div>
                                     </div>
@@ -359,25 +359,6 @@
                                             </div>
                                         </div>
                                         <input type="hidden" id="convenioUniversidades" name="convenioUniversidades" value="false">
-                                    </div>
-                                    
-                                    <!-- Información de Pago -->
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="montoPago" class="form-label">
-                                                <i class="fas fa-dollar-sign me-1"></i>Monto de Pago
-                                            </label>
-                                            <input type="number" class="form-control" id="montoPago" name="montoPago" 
-                                                   min="0" step="0.01" placeholder="0.00" readonly>
-                                            <div class="form-text">Se completará automáticamente con el convenio</div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="conceptoPago" class="form-label">
-                                                <i class="fas fa-file-invoice me-1"></i>Concepto de Pago
-                                            </label>
-                                            <input type="text" class="form-control" id="conceptoPago" name="conceptoPago" 
-                                                   placeholder="Se asignará automáticamente" readonly>
-                                        </div>
                                     </div>
                                     
                                     <div class="d-grid gap-2">
@@ -434,22 +415,22 @@
         </div>
     </div>
 
-    <!-- Sección de Filtros y Visualización de Alumnos -->
+    <!-- Sección Simplificada de Búsqueda y Filtros -->
     <div class="container mt-4">
         <div class="main-container">
             <div class="card border-0 shadow-lg">
                 <div class="header-section bg-gradient text-white">
                     <h1 class="h3 mb-0">
-                        <i class="fas fa-filter me-2"></i>
-                        Filtros y Reportes de Alumnos
+                        <i class="fas fa-search me-2"></i>
+                        Buscar Alumnos
                     </h1>
-                    <p class="mb-0 opacity-75">Visualiza y filtra alumnos por diferentes criterios</p>
+                    <p class="mb-0 opacity-75">Busca y filtra alumnos registrados</p>
                 </div>
                 
                 <div class="card-body">
-                    <!-- Controles de Filtro -->
+                    <!-- Controles de Filtro Simplificados -->
                     <div class="row mb-4">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="filterCarrera" class="form-label">
                                 <i class="fas fa-graduation-cap me-1"></i>Programa de Estudios
                             </label>
@@ -460,8 +441,8 @@
                                 </optgroup>
                                 <optgroup label="Licenciaturas">
                                     <option value="Enfermería">Enfermería</option>
-                                    <option value="Derecho">Derecho</option>
                                     <option value="Psicología">Psicología</option>
+                                    <option value="Derecho">Derecho</option>
                                     <option value="Gestión Empresarial">Gestión Empresarial</option>
                                     <option value="Ingeniería Industrial">Ingeniería Industrial</option>
                                     <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
@@ -472,29 +453,18 @@
                             </select>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="filterModalidad" class="form-label">
                                 <i class="fas fa-clock me-1"></i>Modalidad
                             </label>
                             <select class="form-select" id="filterModalidad" onchange="applyFilters()">
                                 <option value="">Todas las modalidades</option>
-                                <option value="Escolarizada">Escolarizada</option>
-                                <option value="Semiescolarizada">Semiescolarizada</option>
+                                <option value="Escolarizado">Escolarizado</option>
+                                <option value="Semi">Semi</option>
                             </select>
                         </div>
                         
-                        <div class="col-md-3">
-                            <label for="filterConvenio" class="form-label">
-                                <i class="fas fa-handshake me-1"></i>Convenio
-                            </label>
-                            <select class="form-select" id="filterConvenio" onchange="applyFilters()">
-                                <option value="">Todos</option>
-                                <option value="true">Con Convenio</option>
-                                <option value="false">Sin Convenio</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="searchStudent" class="form-label">
                                 <i class="fas fa-search me-1"></i>Buscar Alumno
                             </label>
@@ -509,36 +479,15 @@
                             <button class="btn btn-outline-primary me-2" onclick="clearFilters()">
                                 <i class="fas fa-eraser me-1"></i>Limpiar Filtros
                             </button>
-                            <button class="btn btn-outline-success me-2" onclick="exportToCSV()">
-                                <i class="fas fa-download me-1"></i>Exportar CSV
-                            </button>
-                            <button class="btn btn-outline-info" onclick="generateReport()">
-                                <i class="fas fa-chart-bar me-1"></i>Generar Reporte
-                            </button>
                         </div>
                         <div class="col-md-6 text-end">
                             <span class="badge bg-primary fs-6" id="filteredCount">0 alumnos encontrados</span>
                         </div>
                     </div>
                     
-                    <!-- Estadísticas por Programa -->
-                    <div class="row mb-4" id="statsSection">
-                        <div class="col-12">
-                            <h5 class="text-primary mb-3">
-                                <i class="fas fa-chart-pie me-2"></i>Estadísticas por Programa
-                            </h5>
-                            <div class="row" id="programStats">
-                                <!-- Se llenará dinámicamente -->
-                            </div>
-                        </div>
-                    </div>
-                    
                     <!-- Lista Filtrada de Alumnos -->
                     <div class="row">
                         <div class="col-12">
-                            <h5 class="text-primary mb-3">
-                                <i class="fas fa-list me-2"></i>Lista de Alumnos
-                            </h5>
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
                                     <thead class="table-dark">
@@ -548,15 +497,13 @@
                                             <th>Programa</th>
                                             <th>Modalidad</th>
                                             <th>CURP</th>
-                                            <th>Convenio</th>
-                                            <th>Monto</th>
+                                            <th>Beca Bienestar</th>
                                             <th>Fecha Registro</th>
-                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody id="filteredStudentsTable">
                                         <tr>
-                                            <td colspan="9" class="text-center text-muted py-4">
+                                            <td colspan="7" class="text-center text-muted py-4">
                                                 <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
                                                 <br>No hay alumnos para mostrar
                                             </td>
@@ -685,8 +632,6 @@
         function toggleConvenioBienestar() {
             const button = document.getElementById('convenioBienestarBtn');
             const convenioInfo = document.getElementById('convenioInfo');
-            const montoPago = document.getElementById('montoPago');
-            const conceptoPago = document.getElementById('conceptoPago');
             const hiddenInput = document.getElementById('convenioUniversidades');
             
             convenioBienestarActivo = !convenioBienestarActivo;
@@ -696,16 +641,12 @@
                 button.className = 'btn btn-success';
                 button.innerHTML = '<i class="fas fa-check me-2"></i>Convenio Bienestar Activado<small class="d-block">Beca de $1,000.00 aplicada</small>';
                 convenioInfo.classList.remove('d-none');
-                montoPago.value = '1000.00';
-                conceptoPago.value = 'Convenio Universidades del Bienestar - Beca';
                 hiddenInput.value = 'true';
             } else {
                 // Desactivar convenio
                 button.className = 'btn btn-outline-success';
                 button.innerHTML = '<i class="fas fa-handshake me-2"></i>Aplicar Convenio Bienestar<small class="d-block">Beca automática de $1,000.00</small>';
                 convenioInfo.classList.add('d-none');
-                montoPago.value = '';
-                conceptoPago.value = '';
                 hiddenInput.value = 'false';
             }
         }
@@ -716,15 +657,15 @@
             
             const formData = new FormData(this);
             const studentData = {
-                nombres: formData.get('nombres') || 'Sin especificar',
-                apellidos: formData.get('apellidos') || 'Sin especificar',
+                nombres: formData.get('nombres') || '',
+                apellidos: formData.get('apellidos') || '',
                 fechaNacimiento: formData.get('fechaNacimiento') || '',
                 curp: (formData.get('curp') || '').toUpperCase(),
-                programa: formData.get('programa') || 'Sin especificar',
-                modalidad: formData.get('modalidad') || 'Sin especificar',
+                programa: formData.get('programa') || '',
+                modalidad: formData.get('modalidad') || '',
                 convenio: formData.get('convenioUniversidades') === 'true',
-                montoPago: formData.get('montoPago') || '0.00',
-                conceptoPago: formData.get('conceptoPago') || '',
+                montoPago: formData.get('convenioUniversidades') === 'true' ? '1000.00' : '0.00',
+                conceptoPago: formData.get('convenioUniversidades') === 'true' ? 'Convenio Universidades del Bienestar - Beca' : '',
                 fechaRegistro: new Date().toISOString().split('T')[0]
             };
             
@@ -1006,7 +947,6 @@
         function applyFilters() {
             const filterCarrera = document.getElementById('filterCarrera').value;
             const filterModalidad = document.getElementById('filterModalidad').value;
-            const filterConvenio = document.getElementById('filterConvenio').value;
             const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
             
             filteredStudents = students.filter(student => {
@@ -1015,12 +955,6 @@
                 
                 // Filtro por modalidad
                 if (filterModalidad && student.modalidad !== filterModalidad) return false;
-                
-                // Filtro por convenio
-                if (filterConvenio !== '') {
-                    const hasConvenio = filterConvenio === 'true';
-                    if (student.convenio !== hasConvenio) return false;
-                }
                 
                 // Filtro por búsqueda
                 if (searchTerm) {
@@ -1033,7 +967,6 @@
             });
             
             updateFilteredView();
-            updateProgramStats();
         }
         
         // Actualizar vista filtrada
@@ -1046,7 +979,7 @@
             if (filteredStudents.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" class="text-center text-muted py-4">
+                        <td colspan="7" class="text-center text-muted py-4">
                             <i class="fas fa-search fa-2x mb-2 opacity-50"></i>
                             <br>No hay alumnos que coincidan con los filtros
                         </td>
@@ -1059,14 +992,14 @@
                 <tr>
                     <td><span class="badge bg-secondary">${student.id}</span></td>
                     <td>
-                        <strong>${student.nombres} ${student.apellidos}</strong>
+                        <strong>${student.nombres || 'Sin especificar'} ${student.apellidos || 'Sin especificar'}</strong>
                         ${student.fechaNacimiento ? `<br><small class="text-muted">Nacimiento: ${formatDate(student.fechaNacimiento)}</small>` : ''}
                     </td>
                     <td>
-                        <span class="badge bg-primary">${student.programa}</span>
+                        <span class="badge bg-primary">${student.programa || 'Sin especificar'}</span>
                     </td>
                     <td>
-                        <span class="badge bg-info">${student.modalidad}</span>
+                        <span class="badge bg-info">${student.modalidad || 'Sin especificar'}</span>
                     </td>
                     <td>
                         <code class="small">${student.curp || 'No especificado'}</code>
@@ -1078,18 +1011,7 @@
                         }
                     </td>
                     <td>
-                        <strong class="text-success">$${student.montoPago}</strong>
-                    </td>
-                    <td>
                         <small>${formatDate(student.fechaRegistro)}</small>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetails(${student.id})">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteStudent(${student.id})">
-                            <i class="fas fa-trash"></i>
-                        </button>
                     </td>
                 </tr>
             `).join('');
@@ -1151,7 +1073,6 @@
         function clearFilters() {
             document.getElementById('filterCarrera').value = '';
             document.getElementById('filterModalidad').value = '';
-            document.getElementById('filterConvenio').value = '';
             document.getElementById('searchStudent').value = '';
             applyFilters();
         }
@@ -1251,65 +1172,11 @@ Fecha de Registro: ${formatDate(student.fechaRegistro)}`);
 • Sin convenio: ${total - conConvenio}
 • Monto total convenios: $${montoTotal.toFixed(2)} MXN
 
-📚 DISTRIBUCIÓN POR PROGRAMA:
-${Object.entries(programas).map(([prog, count]) => 
-    `• ${prog}: ${count} alumno${count !== 1 ? 's' : ''}`
-).join('\n')}
-
-🎯 GENERADO POR: ${document.getElementById('adminUserName').textContent}`;
-            
-            // Mostrar reporte en una ventana nueva
-            const ventana = window.open('', '_blank');
-            ventana.document.write(`
-                <html>
-                    <head>
-                        <title>Reporte Garden University</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; }
-                            pre { background: #f5f5f5; padding: 15px; border-radius: 5px; }
-                        </style>
-                    </head>
-                    <body>
-                        <pre>${reporteTexto}</pre>
-                        <button onclick="window.print()">Imprimir</button>
-                        <button onclick="window.close()">Cerrar</button>
-                    </body>
-                </html>
-            `);
-        }
         
         // Inicializar filtros cuando se cargan los datos
         function initializeFilters() {
-            applyFilters();
-        }
-        
-        // Sobrescribir la función initializeData para incluir filtros
-        // Función para alternar reconexión a la base de datos
-        async function toggleSync() {
-            const button = document.getElementById('syncToggle');
-            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Conectando...';
-            button.disabled = true;
-            
-            try {
-                const connected = await gardenDB.initialize();
-                
-                if (connected) {
-                    // Sincronizar datos actuales
-                    if (students.length > 0) {
-                        await gardenDB.syncToDatabase();
-                    }
-                    
-                    showAlert('success', '✅ Base de datos conectada y sincronizada');
-                    updateDatabaseStatus(true);
-                } else {
-                    throw new Error('No se pudo conectar');
-                }
-            } catch (error) {
-                showAlert('error', '❌ Error conectando a la base de datos. Modo offline activo.');
-                updateDatabaseStatus(false);
-            }
-            
-            button.disabled = false;
+            filteredStudents = [...students];
+            updateFilteredView();
         }
 
         // Inicializar sistema al cargar la página
@@ -1317,11 +1184,6 @@ ${Object.entries(programas).map(([prog, count]) =>
             initializeSystem();
         });
 
-        const originalInitializeData = initializeSystem;
-        initializeData = async function() {
-            await originalInitializeData();
-            initializeFilters();
-        };
     </script>
 </body>
 </html>
